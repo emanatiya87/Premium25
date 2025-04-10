@@ -1,18 +1,6 @@
-function InputCol({
-  children,
-  size,
-}: {
-  children: React.ReactNode;
-  size?: string;
-}) {
+function InputCol({ children }: { children: React.ReactNode }) {
   return (
-    <div
-      style={{
-        width: size ? `${size}%` : "100%",
-        minWidth: size ? `${size}%` : "100%",
-      }}
-      className=" flex flex-col "
-    >
+    <div className=" flex flex-col flex-1    basis-[100%] md:basis-0 lg:basis-0   ">
       {children}
     </div>
   );

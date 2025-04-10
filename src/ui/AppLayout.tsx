@@ -3,7 +3,7 @@ import Header from "./Header";
 
 function AppLayout() {
   return (
-    <div className="min-h-screen bg-gradient-to-b from-[#333333] to-[#8B1313] px-48 flex flex-col">
+    <div className="min-h-screen bg-gradient-to-b from-[#333333] to-[#8B1313] px-2 md:px-10 lg:px-48 flex flex-col">
       <Header />
       <main>{<Outlet />}</main>
     </div>

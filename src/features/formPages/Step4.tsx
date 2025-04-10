@@ -12,7 +12,7 @@ function Step4() {
   return (
     <>
       <InputGroup>
-        <InputCol size="45">
+        <InputCol>
           <select
             {...register("aboutUs", {
               required: true,
@@ -39,7 +39,7 @@ function Step4() {
         </InputCol>
       </InputGroup>
       <InputGroup>
-        <InputCol size="45">
+        <InputCol>
           <label className="inline-flex items-center space-x-2 cursor-pointer">
             <input
               type="checkbox"

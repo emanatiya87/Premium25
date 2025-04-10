@@ -9,11 +9,11 @@ function Success() {
   if (!studentData) return <NotFound />;
   // console.log("Student data from local storage:", studentData); // Log the student data
   return (
-    <div className="bg-white w-[85%] m-auto rounded-tl-[80px] rounded-br-[80px] p-10 lg:p-10 ">
-      <h3 className="uppercase text-center text-3xl  text-primary font-bold  tracking-[10px] ">
+    <div className=" bg-white w-full  lg:w-[85%] m-auto rounded-tl-[40px] rounded-br-[40px] p-4 md:p-6 lg:p-10 ">
+      <h3 className="uppercase text-center text-3xl  text-primary font-bold  tracking-[5px] lg:tracking-[10px] ">
         congralation !{" "}
       </h3>
-      <p className="capitalize text-center text-2xl my-3 ">
+      <p className="capitalize text-center text-lg lg:text-2xl my-3 ">
         you on a one step from complete your application
       </p>
       {studentData.cv === "Pending" && (

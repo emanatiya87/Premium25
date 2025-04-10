@@ -87,7 +87,7 @@ function Form({
     <FormProvider {...methods}>
       <form
         onSubmit={methods.handleSubmit(onSubmit)}
-        className=" bg-white w-[85%] m-auto rounded-tl-[80px] rounded-br-[80px] p-4 lg:p-10 "
+        className=" bg-white w-[95%]  lg:w-[85%] m-auto rounded-tl-[40px] rounded-br-[40px] p-4 md:p-6 lg:p-10 "
       >
         {renderStep()}
         <div className="flex items-center justify-between mt-10">

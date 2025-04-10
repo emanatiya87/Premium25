@@ -15,11 +15,26 @@ const faculties = {
   arts: ["first year", "second year", "third year", "fourth year"],
   other: ["first year", "second year", "third year", "fourth year"],
 };
+// const allMajors = [
+//   "'Civil'",
+//   "'Architectural'",
+//   "'Mechanical General(Automtive-Power-Mechatronics)'",
+//   "'Electrical General(Computer-Communication)'",
+//   "'Electrical Power'",
+//   "'other'",
+//   "'Mechanical production'",
+//   "'Mechanical (Power / Energy)'",
+//   "'Mechanical Production'",
+//   "'Mechanical Automtive'",
+//   "'Mechanical Mechatronics'",
+//   "'Electrical Computer'",
+//   "'Electrical Communication'",
+// ];
 const depertments = [
   "Civil",
   "Architectural",
   "Mechanical production",
-  "Mechanical Power / Energy",
+  "Mechanical (Power / Energy)",
   "Mechanical Production",
   "Mechanical Automtive",
   "Mechanical Mechatronics",
@@ -32,9 +47,9 @@ const majors = {
   2: [
     "Civil",
     "Architectural",
-    "Mechanical General(Automtive,Power,Mechatronics)",
+    "Mechanical General(Automtive-Power-Mechatronics)",
     "Mechanical production",
-    "Electrical General (Computer&Communication)",
+    "Electrical General(Computer-Communication)",
     "Electrical Power",
   ],
   3: depertments,
@@ -43,6 +58,9 @@ const majors = {
 };
 
 function Step2() {
+  // const all = allMajors.join(",").replace(/ /g, "_");
+  // console.log(all);
+
   const {
     register,
     watch,
@@ -51,7 +69,7 @@ function Step2() {
   return (
     <>
       <InputGroup>
-        <InputCol size="45">
+        <InputCol>
           <input
             {...register("firstName", {
               required: "First name is required",
@@ -62,15 +80,17 @@ function Step2() {
             })}
             type="text"
             placeholder="First Name"
-            className="w-full placeholder:text-black p-2  border-b-2 border-primary focus:outline-none focus:border-black bg-secondary "
+            className="form-input "
           />
-          {errors.firstName && (
-            <p className="text-red-500 text-sm  mt-1 pl-1">
-              {String(errors.firstName.message)}
-            </p>
-          )}
+          <p
+            className={` ${
+              errors.firstName ? "visible" : "invisible"
+            }  text-red-500 text-sm mt-1 pl-1"`}
+          >
+            {String(errors?.firstName?.message)}
+          </p>
         </InputCol>
-        <InputCol size="45">
+        <InputCol>
           <input
             {...register("lastName", {
               required: "Last name is required",
@@ -81,17 +101,19 @@ function Step2() {
             })}
             type="text"
             placeholder="Last Name"
-            className="w-full placeholder:text-black p-2  border-b-2 border-primary focus:outline-none focus:border-black bg-secondary"
+            className="form-input"
           />
-          {errors.lastName && (
-            <p className="text-red-500 text-sm  pl-1">
-              {String(errors.lastName.message)}
-            </p>
-          )}
+          <p
+            className={` ${
+              errors.lastName ? "visible" : "invisible"
+            }  text-red-500 text-sm mt-1 pl-1"`}
+          >
+            {String(errors?.lastName?.message)}
+          </p>
         </InputCol>
       </InputGroup>
       <InputGroup>
-        <InputCol size="100">
+        <InputCol>
           <input
             {...register("email", {
               required: "Email is required",
@@ -102,17 +124,19 @@ function Step2() {
             })}
             type="email"
             placeholder="Email"
-            className="w-full placeholder:text-black p-2  border-b-2 border-primary focus:border-black focus:outline-none  bg-secondary"
+            className="form-input"
           />
-          {errors.email && (
-            <p className="text-red-500 text-sm mt-2 pl-1">
-              {String(errors.email.message)}
-            </p>
-          )}
+          <p
+            className={` ${
+              errors.email ? "visible" : "invisible"
+            }  text-red-500 text-sm mt-1 pl-1"`}
+          >
+            {String(errors?.email?.message)}
+          </p>
         </InputCol>
       </InputGroup>
       <InputGroup>
-        <InputCol size="100">
+        <InputCol>
           <input
             {...register("phone", {
               required: "Phone number is required",
@@ -123,23 +147,25 @@ function Step2() {
             })}
             type="text"
             placeholder="Phone Number"
-            className="w-full placeholder:text-black p-2  border-b-2 border-primary focus:border-black focus:outline-none  bg-secondary"
+            className="form-input"
           />
-          {errors.phone && (
-            <p className="text-red-500 text-sm mt-2 pl-1">
-              {String(errors.phone.message)}
-            </p>
-          )}
+          <p
+            className={` ${
+              errors.phone ? "visible" : "invisible"
+            }  text-red-500 text-sm mt-1 pl-1"`}
+          >
+            {String(errors?.phone?.message)}
+          </p>
         </InputCol>
       </InputGroup>
       <InputGroup>
-        <InputCol size="45">
+        <InputCol>
           <select
             {...register("university", {
               validate: (value) =>
                 value !== "def" || "please select university",
             })}
-            className="w-full placeholder:text-black p-2  border-b-2 border-primary focus:border-black focus:outline-none  bg-secondary"
+            className="form-input"
           >
             <option value="def">Select University</option>
             <option value="AinShams ">Ain Shams </option>
@@ -154,26 +180,28 @@ function Step2() {
               })}
               type="text"
               placeholder="Enter university"
-              className="w-full placeholder:text-black p-2  border-b-2 border-primary focus:border-black focus:outline-none  bg-secondary mt-1"
+              className="form-input mt-1"
             />
           )}
-          {errors.university && (
-            <p className="text-red-500 text-sm mt-2 pl-1">
-              {String(errors.university.message)}
-            </p>
-          )}
-          {errors.otherUniversity && (
-            <p className="text-red-500 text-sm mt-2 pl-1">
-              {String(errors.otherUniversity.message)}
-            </p>
-          )}
+
+          <p
+            className={` ${
+              errors.university || errors.otherUniversity
+                ? "visible"
+                : "invisible"
+            }  text-red-500 text-sm mt-1 pl-1"`}
+          >
+            {String(
+              errors?.university?.message || errors.otherUniversity?.message
+            )}
+          </p>
         </InputCol>
-        <InputCol size="45">
+        <InputCol>
           <select
             {...register("faculty", {
               validate: (value) => value !== "def" || "please select faculty",
             })}
-            className="w-full placeholder:text-black p-2  border-b-2 border-primary focus:border-black focus:outline-none  bg-secondary"
+            className="form-input"
           >
             <option value="def">Select Faculty</option>
             {Object.keys(faculties).map((faculty) => (
@@ -189,31 +217,26 @@ function Step2() {
               })}
               type="text"
               placeholder="Enter faculty"
-              className="w-full placeholder:text-black p-2  border-b-2 border-primary focus:border-black focus:outline-none  bg-secondary mt-1"
+              className="form-input mt-1"
             />
-          )}
-          {errors.faculty && (
-            <p className="text-red-500 text-sm mt-2 pl-1">
-              {String(errors.faculty.message)}
-            </p>
           )}
           <p
             className={` ${
-              errors.otherFaculty ? "visible" : "invisible"
-            }  text-red-500 text-sm mt-2 pl-1"`}
+              errors.faculty || errors.otherFaculty ? "visible" : "invisible"
+            }  text-red-500 text-sm mt-1 pl-1"`}
           >
-            {String(errors?.otherFaculty?.message)}
+            {String(errors?.faculty?.message || errors.otherFaculty?.message)}
           </p>
         </InputCol>
       </InputGroup>
       <InputGroup>
-        <InputCol size="45">
+        <InputCol>
           <select
             {...register("year", {
               validate: (value) =>
                 value !== "def" || "please select your current year",
             })}
-            className="w-full placeholder:text-black p-2  border-b-2 border-primary focus:border-black focus:outline-none  bg-secondary"
+            className="form-input"
           >
             <option value="def">Current Year</option>
             {faculties[watch("faculty") as keyof typeof faculties]?.map(
@@ -227,7 +250,7 @@ function Step2() {
           <p
             className={` ${
               errors.year ? "visible" : "invisible"
-            }  text-red-500 text-sm mt-2 pl-1"`}
+            }  text-red-500 text-sm mt-1 pl-1"`}
           >
             {String(errors?.year?.message)}
           </p>
@@ -235,17 +258,17 @@ function Step2() {
         {watch("faculty") == "engineering" &&
           watch("year") !== "1" &&
           watch("year") !== "def" && (
-            <InputCol size="45">
+            <InputCol>
               <select
                 {...register("major", {
                   validate: (value) =>
                     value !== "def" || "please select your major",
                 })}
-                className="w-full placeholder:text-black p-2  border-b-2 border-primary focus:border-black focus:outline-none  bg-secondary"
+                className="form-input"
               >
                 <option value="def">Select Major</option>
                 {majors[watch("year") as keyof typeof majors]?.map((major) => (
-                  <option value={major.replace(/ /g, "-")} key={major}>
+                  <option value={major.replace(/ /g, "_")} key={major}>
                     {major}
                   </option>
                 ))}
@@ -254,7 +277,7 @@ function Step2() {
               <p
                 className={` ${
                   errors.major ? "visible" : "invisible"
-                }  text-red-500 text-sm mt-2 pl-1"`}
+                }  text-red-500 text-sm mt-1 pl-1"`}
               >
                 {String(errors?.major?.message)}
               </p>

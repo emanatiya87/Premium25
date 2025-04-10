@@ -7,7 +7,7 @@ function ProgressBar({
 }) {
   // const currentStep = 3;
   return (
-    <div className="relative w-[95%] mx-auto mb-20">
+    <div className="relative w-full lg:w-[95%]  mx-auto mb-10 lg:mb-20">
       <span className="block  h-[2px] bg-white rounded-full"></span>
       <span
         style={{

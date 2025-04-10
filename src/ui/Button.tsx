@@ -17,7 +17,8 @@ function Button({
         marginLeft: children !== "previous" ? "auto" : undefined,
       }}
       disabled={isLoading}
-      className="disabled:cursor-not-allowed disabled:bg-red-400  border text-lg capitalize hover:bg-primaryDark transition duration-300 font-normal w-36 px-8 py-1 bg-primary text-white"
+      className="disabled:cursor-not-allowed disabled:bg-red-400  border text-lg capitalize hover:bg-primaryDark transition duration-300 font-normal 
+      w-24 lg:w-36 px-2 md:px-6 lg:px-8 py-1 bg-primary text-white"
       type={type}
       onClick={onClick}
     >

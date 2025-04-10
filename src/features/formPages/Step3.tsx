@@ -38,13 +38,13 @@ function Step3() {
   return (
     <>
       <InputGroup>
-        <InputCol size="45">
+        <InputCol>
           <select
             {...register("firstPreference", {
               required: true,
               validate: (value) => value !== "def" || "Please select a company",
             })}
-            className="w-full placeholder:text-black p-2  border-b-2 border-primary focus:border-black focus:outline-none  bg-secondary"
+            className="form-input"
           >
             <option value="def">Select your first preference</option>
             {companies.map(({ id, name }) => {
@@ -68,13 +68,13 @@ function Step3() {
             {String(errors?.firstPreference?.message)}
           </p>
         </InputCol>
-        <InputCol size="45">
+        <InputCol>
           <select
             {...register("secondPreference", {
               required: true,
               validate: (value) => value !== "def" || "Please select a company",
             })}
-            className="w-full placeholder:text-black p-2  border-b-2 border-primary focus:border-black focus:outline-none  bg-secondary"
+            className="form-input"
           >
             <option value="def">Select your second preference</option>
             {companies.map(({ id, name }) => {
@@ -100,13 +100,13 @@ function Step3() {
         </InputCol>
       </InputGroup>
       <InputGroup>
-        <InputCol size="45">
+        <InputCol>
           <select
             {...register("thirdPreference", {
               required: true,
               validate: (value) => value !== "def" || "Please select a company",
             })}
-            className="w-full placeholder:text-black p-2  border-b-2 border-primary focus:border-black focus:outline-none  bg-secondary"
+            className="form-input"
           >
             <option value="def">Select your third preference</option>
             {companies.map(({ id, name }) => {
@@ -132,7 +132,7 @@ function Step3() {
         </InputCol>
       </InputGroup>
       <InputGroup>
-        <InputCol size="100">
+        <InputCol>
           <textarea
             {...register("previousExperience", {
               required: {
@@ -146,7 +146,7 @@ function Step3() {
               validate: (value) =>
                 value.length < 500 || "Please enter less than 500 characters",
             })}
-            className="w-full placeholder:text-black p-2  border-b-2 border-primary focus:border-black focus:outline-none  bg-secondary"
+            className="form-input"
             placeholder="Please enter your previous experience"
             rows={6}
           ></textarea>
