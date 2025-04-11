@@ -95,3 +95,27 @@ export async function addStudent(formData: FormType) {
     throw new Error(message);
   }
 }
+export async function uploadCv(formData: FormData) {
+  try {
+    const response = await axios.post(
+      "https://apeceg.com/Events2025/add_cv.php",
+      formData,
+      {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      }
+    );
+
+    console.log(response.data.message);
+    return response.data.message;
+  } catch (error) {
+    console.error("Error uploading CV:", error);
+    const message =
+      (axios.isAxiosError(error) && error.response?.data?.error) ||
+      (axios.isAxiosError(error) && error.response?.data?.message) ||
+      "Unknown error";
+
+    throw new Error(message);
+  }
+}
