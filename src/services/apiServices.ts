@@ -1,6 +1,32 @@
 import axios from "axios";
 import { companiesType, FormType } from "../types/form";
 
+export async function fetchQuiz(hash_code: string){
+try{
+  const res=await axios.get(`https://apeceg.com/Events2025/quiz_api.php?action=quiz&hash_code=${hash_code}`);
+  if (res.status !== 200 || !res.data) {
+    throw new Error("Failed to fetch Quiz");
+  };
+  console.log(res)
+  return res.data;
+   
+}
+catch(error){
+  console.error("Error fetching Quiz ");
+    throw error;
+}
+};
+
+export async function SubmitQuiz(){
+  try{
+    
+  }
+  catch(error){
+    console.error("Erorr Submitting Quiz ");
+      throw error;
+  }
+};
+
 export async function getCompanies(
   major: string,
   year: string
