@@ -205,7 +205,7 @@ function Step2() {
           >
             <option value="def">Select Faculty</option>
             {Object.keys(faculties).map((faculty) => (
-              <option value={faculty} key={faculty}>
+              <option className="capitalize" value={faculty} key={faculty}>
                 {faculty}
               </option>
             ))}
@@ -238,10 +238,12 @@ function Step2() {
             })}
             className="form-input"
           >
-            <option value="def">Current Year</option>
+            <option className="capitalize" value="def">
+              Current Year
+            </option>
             {faculties[watch("faculty") as keyof typeof faculties]?.map(
               (year, index) => (
-                <option value={index + 1} key={year}>
+                <option className="capitalize" value={index + 1} key={year}>
                   {year}
                 </option>
               )

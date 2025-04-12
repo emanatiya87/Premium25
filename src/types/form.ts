@@ -11,6 +11,7 @@ export type FormType = {
   firstPreference: string;
   secondPreference: string;
   thirdPreference: string;
+  preferencePercentage: string;
   aboutUs: string;
   includeCv: boolean;
   cv: FileList;

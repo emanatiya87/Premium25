@@ -7,7 +7,7 @@ import Step3 from "./Step3";
 import Step4 from "./Step4";
 import { FormType } from "../../types/form";
 import toast from "react-hot-toast";
-import { useAddStudent } from "../useAddStudent";
+import { useAddStudent } from "./useAddStudent";
 import { useNavigate } from "react-router";
 
 const validateSteps: Record<number, (keyof FormType)[]> = {
@@ -28,6 +28,7 @@ const validateSteps: Record<number, (keyof FormType)[]> = {
     "firstPreference",
     "secondPreference",
     "thirdPreference",
+    "preferencePercentage",
     "previousExperience",
   ],
   4: ["aboutUs"],
@@ -44,7 +45,13 @@ function Form({
   const navigate = useNavigate();
   const methods = useForm<FormType>();
   function handleNext() {
-    if (currentStep == 3 && !methods.getValues("firstPreference")) return;
+    // console.log(methods.getValues("firstPreference"));
+    if (
+      currentStep == 3 &&
+      (methods.getValues("firstPreference") === "def" ||
+        !methods.getValues("firstPreference"))
+    )
+      return;
 
     methods.trigger(validateSteps[currentStep]).then((isValid) => {
       if (isValid) {

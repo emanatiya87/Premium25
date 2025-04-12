@@ -30,10 +30,12 @@ function Step3() {
   });
 
   if (isLoading) return <Spinner />;
-  if (error) return <div>Error fetching companies</div>;
-  if (!companies || companies.length === 0) {
-    return <div>No companies found</div>;
-  }
+  if (error || !companies || companies.length === 0)
+    return (
+      <p className="text-3xl text-center my-10">
+        No Compaines Available Now 😒
+      </p>
+    );
 
   return (
     <>
@@ -71,8 +73,11 @@ function Step3() {
         <InputCol>
           <select
             {...register("secondPreference", {
-              required: true,
-              validate: (value) => value !== "def" || "Please select a company",
+              required: companies.length > 1,
+              validate: (value) =>
+                value !== "def" ||
+                companies.length < 2 ||
+                "Please select a company",
             })}
             className="form-input"
           >
@@ -103,8 +108,11 @@ function Step3() {
         <InputCol>
           <select
             {...register("thirdPreference", {
-              required: true,
-              validate: (value) => value !== "def" || "Please select a company",
+              required: companies.length > 2,
+              validate: (value) =>
+                value !== "def" ||
+                companies.length < 3 ||
+                "Please select a company",
             })}
             className="form-input"
           >
@@ -128,6 +136,29 @@ function Step3() {
             }  text-red-500 text-sm mt-2 pl-1"`}
           >
             {String(errors?.thirdPreference?.message)}
+          </p>
+        </InputCol>
+        <InputCol>
+          <select
+            {...register("preferencePercentage", {
+              required: true,
+              validate: (value) => value !== "def" || "Please select a company",
+            })}
+            className="form-input "
+          >
+            <option value="def">
+              Percentage (First preference: Second preference: Third Preference)
+            </option>
+            <option value="100:0:0">100:0:0</option>
+            <option value="50:30:20">50:30:20</option>
+            <option value="50:50:0">50:50:0</option>
+          </select>
+          <p
+            className={` ${
+              errors.preferencePercentage ? "visible" : "invisible"
+            }  text-red-500 text-sm mt-2 pl-1"`}
+          >
+            {String(errors?.preferencePercentage?.message)}
           </p>
         </InputCol>
       </InputGroup>

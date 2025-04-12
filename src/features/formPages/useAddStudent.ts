@@ -1,5 +1,5 @@
 import { useMutation } from "@tanstack/react-query";
-import { addStudent as addStudentApi } from "../services/apiServices";
+import { addStudent as addStudentApi } from "../../services/apiServices";
 import toast from "react-hot-toast";
 
 export function useAddStudent() {
