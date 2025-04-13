@@ -23,7 +23,7 @@ function App() {
   return (
     <QueryClientProvider client={queryClient}>
       <ReactQueryDevtools initialIsOpen={false} />
-      <BrowserRouter>
+      <BrowserRouter basename="/APEC-Premium-2025">
         <Routes>
           <Route element={<AppLayout />}>
             <Route path="/" element={<PremiumForm />} />
