@@ -1,5 +1,5 @@
 import axios from "axios";
-import { companiesType, FormType } from "../types/form";
+import { companiesType, FormType, StudentType } from "../types/form";
 
 export async function fetchQuiz(hash_code: string) {
   try {
@@ -76,9 +76,9 @@ export async function addStudent(formData: FormType) {
     college: faculty === "other" ? otherFaculty : faculty,
     year: +year,
     major: major || "other",
-    first_pref: +firstPreference,
-    second_pref: +secondPreference,
-    third_pref: +thirdPreference,
+    first_pref: +firstPreference || null,
+    second_pref: +secondPreference || null,
+    third_pref: +thirdPreference || null,
     event_source: aboutUs,
     experience: previousExperience,
     cv: includeCv ? cv[0] : null,
@@ -144,4 +144,16 @@ export async function uploadCv(formData: FormData) {
 
     throw new Error(message);
   }
+}
+
+export async function getStudentData(
+  searchQuery: string
+): Promise<StudentType[]> {
+  const response = await axios.get(
+    `https://apeceg.com/Events2025/get_students.php?search=${searchQuery}`
+  );
+  if (response.status !== 200 || !response.data) {
+    throw new Error("Failed to fetch students data");
+  }
+  return response.data.students;
 }

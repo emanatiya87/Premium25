@@ -32,8 +32,8 @@ function App() {
             <Route path="/quiz" element={<Quiz />} />
             <Route path="/success" element={<Success />} />
             <Route path="/thankyou" element={<ThankYou />} />
-            <Route path="/admin25" element={<Data />} />
           </Route>
+          <Route path="/admin25" element={<Data />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>
