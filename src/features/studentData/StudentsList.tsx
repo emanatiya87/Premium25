@@ -27,8 +27,11 @@ function StudentsList({ students }: { students: StudentType[] }) {
         <tbody>
           {(students ?? []).length === 0 ? (
             <tr>
-              <td colSpan={11} className="text-center p-4">
-                No students found.
+              <td
+                colSpan={17}
+                className="lg:text-center p-10 md:text-4xl uppercase text-primary font-semibold"
+              >
+                No students found 😢.
               </td>
             </tr>
           ) : (

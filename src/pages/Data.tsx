@@ -1,4 +1,4 @@
-import { ChangeEvent, useState } from "react";
+import { ChangeEvent, FormEvent, useState } from "react";
 import StudentsList from "../features/studentData/StudentsList";
 import { useStudentsData } from "../features/studentData/useStudentsData";
 import Button from "../ui/Button";
@@ -10,7 +10,7 @@ function Data() {
   const [inputQ, setInputQ] = useState<string>("");
   const { isError, isLoading, students } = useStudentsData(searchQuery);
 
-  function handleSearch(e: SubmitEvent) {
+  function handleSearch(e: FormEvent) {
     e.preventDefault();
     setSearchQuery(inputQ);
   }
@@ -27,7 +27,10 @@ function Data() {
           total registered :{" "}
           <span className="text-primary">{students?.length}</span>{" "}
         </p>
-        <form className=" flex flex-col md:flex-row gap-y-1 lg:gap-x-4 w-full md:w-[50%] m-auto ">
+        <form
+          onSubmit={handleSearch}
+          className=" flex flex-col md:flex-row gap-y-1 lg:gap-x-4 w-full md:w-[50%] m-auto "
+        >
           <input
             placeholder="name or phone"
             type="text"
@@ -37,7 +40,8 @@ function Data() {
               setInputQ(e.target.value)
             }
           />
-          <Button onClick={handleSearch} type="submit">
+          <Button type="submit">
+            {/* // onClick={handleSearch} */}
             search
           </Button>
         </form>
