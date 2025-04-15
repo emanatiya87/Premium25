@@ -11,6 +11,7 @@ import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { Toaster } from "react-hot-toast";
 import Success from "./pages/Success";
 import ThankYou from "./pages/ThankYou";
+import AddInterview from "./pages/AddInterview";
 
 function App() {
   const queryClient = new QueryClient({
@@ -29,6 +30,7 @@ function App() {
             <Route path="/" element={<PremiumForm />} />
             <Route path="/uploadcv" element={<UploadCv />} />
             <Route path="/interviewslot" element={<Interview />} />
+            <Route path="/add-interview" element={<AddInterview />} />
             <Route path="/quiz" element={<Quiz />} />
             <Route path="/success" element={<Success />} />
             <Route path="/thankyou" element={<ThankYou />} />

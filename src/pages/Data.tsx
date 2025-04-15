@@ -46,7 +46,7 @@ function Data() {
           </Button>
         </form>
       </div>
-      <div className="bg-white  w-[95%]  lg:w-full m-auto rounded-tl-[40px] rounded-br-[40px] p-4 md:p-6 lg:p-6 ">
+      <div className="bg-white  w-full   m-auto rounded-tl-[40px] rounded-br-[40px] p-4 md:p-6 lg:p-6 ">
         {isLoading ? <Spinner /> : <StudentsList students={students || []} />}
       </div>
     </div>

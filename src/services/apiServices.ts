@@ -84,7 +84,7 @@ export async function addStudent(formData: FormType) {
     cv: includeCv ? cv[0] : null,
     pref_percentages: preferencePercentage,
   };
-  console.log("Final form data:", finalForm); // Log the final form data
+  // console.log("Final form data:", finalForm); // Log the final form data
   try {
     const response = await axios.post(
       "https://apeceg.com/Events2025/add_students.php",
@@ -95,14 +95,6 @@ export async function addStudent(formData: FormType) {
         },
       }
     );
-
-    // console.log(response);
-    // if (response.data.error) {
-    //   throw new Error(response.data.error);
-    // }
-    // if (response.status !== 200) {
-    //   throw new Error("Failed to add student");
-    // }
 
     return response.data;
   } catch (error) {
@@ -156,4 +148,45 @@ export async function getStudentData(
     throw new Error("Failed to fetch students data");
   }
   return response.data.students;
+}
+
+export async function addInterviewSlot(formData: FormData) {
+  try {
+    const response = await axios.post(
+      "https://apeceg.com/Events2025/add_interview.php",
+      formData,
+      {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      }
+    );
+    return response.data.message;
+  } catch (error) {
+    let message =
+      (axios.isAxiosError(error) && error.response?.data?.message) ||
+      "Unknown error";
+
+    if (message.includes("Duplicate entry")) {
+      message = "you have already add this slot";
+    }
+
+    throw new Error(message);
+  }
+}
+
+export async function getInterviews() {
+  try {
+    const response = await axios.post(
+      "https://apeceg.com/Events2025/get_interviews.php"
+    );
+    console.log(response.data.interviews);
+    return response.data.interviews;
+  } catch (error) {
+    const message =
+      (axios.isAxiosError(error) && error.response?.data?.message) ||
+      "Unknown error";
+
+    throw new Error(message);
+  }
 }
