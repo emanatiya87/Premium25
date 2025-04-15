@@ -177,15 +177,42 @@ export async function addInterviewSlot(formData: FormData) {
 
 export async function getInterviews() {
   try {
-    const response = await axios.post(
+    const response = await axios.get(
       "https://apeceg.com/Events2025/get_interviews.php"
     );
-    console.log(response.data.interviews);
+    // console.log(response.data.interviews);
     return response.data.interviews;
   } catch (error) {
     const message =
       (axios.isAxiosError(error) && error.response?.data?.message) ||
       "Unknown error";
+
+    throw new Error(message);
+  }
+}
+export async function chooseInterView(formData: {
+  phone: string;
+  interview_slot: string;
+}) {
+  try {
+    const response = await axios.post(
+      "https://apeceg.com/Events2025/choose_interview.php",
+      formData,
+      {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      }
+    );
+    return response.data.message;
+  } catch (error) {
+    const message =
+      (axios.isAxiosError(error) && error.response?.data?.message) ||
+      "Unknown error";
+
+    // if (message.includes("Duplicate entry")) {
+    //   message = "you have already add this slot";
+    // }
 
     throw new Error(message);
   }
