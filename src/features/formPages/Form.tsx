@@ -46,15 +46,15 @@ function Form({
   const methods = useForm<FormType>();
   function handleNext() {
     // console.log(methods.getValues("firstPreference"));
-    if (
-      currentStep == 3 &&
-      (methods.getValues("firstPreference") === "def" ||
-        !methods.getValues("firstPreference"))
-    )
-      return;
 
     methods.trigger(validateSteps[currentStep]).then((isValid) => {
       if (isValid) {
+        if (
+          currentStep == 3 &&
+          (methods.getValues("firstPreference") === "def" ||
+            !methods.getValues("firstPreference"))
+        )
+          return;
         setCurrentStep(currentStep + 1);
       }
     });

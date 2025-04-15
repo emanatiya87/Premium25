@@ -1,4 +1,4 @@
-import { addMinutes, format } from "date-fns";
+import { addMinutes, compareAsc, format } from "date-fns";
 import Button from "../ui/Button";
 import { useQuery } from "@tanstack/react-query";
 import { getInterviews } from "../services/apiServices";
@@ -30,9 +30,11 @@ function Interview() {
     handleSubmit,
     register,
   } = useForm<{ interview_slot: string; phone: string }>();
+  const navigate = useNavigate();
+  const { chooseInterview, isAdding } = useChooseInterview();
 
-  if (isLoading) <Spinner />;
-  if (isError) <Error />;
+  if (isLoading) return <Spinner />;
+  if (isError) return <Error />;
 
   const seen = new Set();
   const uniqueInterviews = (interviews ?? []).filter((item) => {
@@ -40,8 +42,11 @@ function Interview() {
     seen.add(item.interview_date);
     return true;
   });
-  const navigate = useNavigate();
-  const { chooseInterview, isAdding } = useChooseInterview();
+
+  // console.log(uniqueInterviews);
+  uniqueInterviews.sort((a, b) =>
+    compareAsc(a.interview_date, b.interview_date)
+  );
   function onsubmit(formData: { interview_slot: string; phone: string }) {
     chooseInterview(formData, {
       onSuccess: () => {
@@ -98,14 +103,10 @@ function Interview() {
                   value={interview.id}
                   key={interview.id}
                 >
+                  {format(interview.interview_date, "eee MM/dd  hh:mm aa")} to{" "}
                   {format(
-                    new Date(interview.interview_date),
-                    "EEEE MM/dd  HH:mm "
-                  )}{" "}
-                  to{" "}
-                  {format(
-                    addMinutes(new Date(interview.interview_date), 45),
-                    "HH:mm"
+                    addMinutes(interview.interview_date, 45),
+                    "hh:mm aa "
                   )}
                 </option>
               ))}

@@ -64,6 +64,8 @@ function AddInterview() {
             placeholderText="Select date and time"
             className="form-input"
             minDate={addDays(new Date(), 1)}
+            minTime={new Date(new Date().setHours(12, 0, 0))}
+            maxTime={new Date(new Date().setHours(23, 0, 0))}
             calendarClassName="bg-white border rounded-lg shadow-lg p-4"
             dayClassName={(date) =>
               `text-sm p-2 rounded-full transition-all duration-200

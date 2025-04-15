@@ -142,7 +142,8 @@ function Step3() {
           <select
             {...register("preferencePercentage", {
               required: true,
-              validate: (value) => value !== "def" || "Please select a company",
+              validate: (value) =>
+                value !== "def" || "Please select pref percentages",
             })}
             className="form-input "
           >
