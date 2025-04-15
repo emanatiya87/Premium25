@@ -1,13 +1,19 @@
 import axios from "axios";
 import { companiesType, FormType } from "../types/form";
 
+interface QuizResponse{
+  score:string
+  total:number
+  results:{
+    string:number
+  }
+}
 export async function fetchQuiz(hash_code: string){
 try{
   const res=await axios.get(`https://apeceg.com/Events2025/quiz_api.php?action=quiz&hash_code=${hash_code}`);
   if (res.status !== 200 || !res.data) {
     throw new Error("Failed to fetch Quiz");
   };
-  console.log(res)
   return res.data;
    
 }
@@ -16,15 +22,28 @@ catch(error){
     throw error;
 }
 };
-
-export async function SubmitQuiz(){
-  try{
-    
-  }
-  catch(error){
-    console.error("Erorr Submitting Quiz ");
-      throw error;
-  }
+export async function addQuiz({
+  hash_code,
+  answersIndex,
+}: {
+  hash_code: string;
+  answersIndex: Record<number, string>;
+})
+:Promise<QuizResponse>{
+const body={hash_code,...answersIndex}
+console.log(body)
+try {
+const res=await axios.post("https://apeceg.com/Events2025/quiz_api.php?action=correct",body);
+if (res.status !== 200 || !res.data) {
+ throw new Error("Failed to fetch quiz");
+}
+//console.log(res.data,"resposne")
+return res.data
+}
+catch (error) {
+  //console.error("Error submitting quiz try later");
+  throw error;
+}
 };
 
 export async function getCompanies(
