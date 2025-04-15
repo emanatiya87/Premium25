@@ -31,7 +31,7 @@ export async function addQuiz({
 })
 :Promise<QuizResponse>{
 const body={hash_code,...answersIndex}
-console.log(body)
+//console.log(body)
 try {
 const res=await axios.post("https://apeceg.com/Events2025/quiz_api.php?action=correct",body);
 if (res.status !== 200 || !res.data) {
