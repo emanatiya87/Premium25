@@ -4,7 +4,7 @@ function Button({
   onClick,
   isLoading,
 }: {
-  children: string;
+  children: string | JSX.Element;
   type: "submit" | "reset" | "button" | undefined;
   isLoading?: boolean;
 
