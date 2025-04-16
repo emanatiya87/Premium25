@@ -11,7 +11,7 @@ function ThankYou() {
     >
       <h2
         id="thank-you"
-        className="text-4xl font-bold text-green-600 mb-4 uppercase tracking-widest"
+        className="text-4xl font-bold text-primary mb-4 uppercase tracking-widest"
       >
         🎉 Thank You!
       </h2>
@@ -19,7 +19,7 @@ function ThankYou() {
         Your {submittedItem} has been submitted successfully.
         <br /> We appreciate your time and effort!
       </p>
-      <p className="text-gray-500 text-sm">You’ll be redirected shortly...</p>
+      {/* <p className="text-gray-500 text-sm">You’ll be redirected shortly...</p> */}
     </section>
   );
 }

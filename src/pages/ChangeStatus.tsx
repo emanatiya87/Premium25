@@ -2,7 +2,7 @@ import { useMutation } from "@tanstack/react-query";
 import Button from "../ui/Button";
 import { changeStatus } from "../services/apiServices";
 import toast from "react-hot-toast";
-import Error from "./Error";
+
 import { ChangeEvent, FormEvent, useState } from "react";
 
 function ChangeStatus() {
