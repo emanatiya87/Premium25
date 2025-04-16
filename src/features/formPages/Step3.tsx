@@ -26,6 +26,7 @@ function Step3() {
         watch("year") === "1" ? "other" : watch("major"),
         watch("year")
       ),
+
     enabled: !!watch("year"),
   });
 

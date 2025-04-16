@@ -46,7 +46,7 @@ function AddInterview() {
             onChange={(e: ChangeEvent<HTMLInputElement>) =>
               setInterviewerName(e.target.value)
             }
-            placeholder="name of interviwer"
+            placeholder="name of interviewer"
             required
           />
         </div>

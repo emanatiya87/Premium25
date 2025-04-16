@@ -117,7 +117,8 @@ export async function addStudent(formData: FormType) {
     return response.data;
   } catch (error) {
     let message =
-      (axios.isAxiosError(error) && error.response?.data?.error) || "Unknown error";
+      (axios.isAxiosError(error) && error.response?.data?.error) ||
+      "Unknown error";
 
     if (message.includes("Duplicate entry")) {
       message = "Phone number or email already exists";
@@ -182,7 +183,8 @@ export async function addInterviewSlot(formData: FormData) {
     return response.data.message;
   } catch (error) {
     let message =
-      (axios.isAxiosError(error) && error.response?.data?.message) || "Unknown error";
+      (axios.isAxiosError(error) && error.response?.data?.message) ||
+      "Unknown error";
 
     if (message.includes("Duplicate entry")) {
       message = "You have already added this slot";
@@ -200,7 +202,8 @@ export async function getInterviews() {
     return response.data.interviews;
   } catch (error) {
     const message =
-      (axios.isAxiosError(error) && error.response?.data?.message) || "Unknown error";
+      (axios.isAxiosError(error) && error.response?.data?.message) ||
+      "Unknown error";
 
     throw new Error(message);
   }
@@ -223,7 +226,28 @@ export async function chooseInterView(formData: {
     return response.data.message;
   } catch (error) {
     const message =
-      (axios.isAxiosError(error) && error.response?.data?.message) || "Unknown error";
+      (axios.isAxiosError(error) && error.response?.data?.message) ||
+      "Unknown error";
+    throw new Error(message);
+  }
+}
+
+export async function changeStatus(formData: { phone: string }) {
+  try {
+    const response = await axios.post(
+      "https://apeceg.com/Events2025/change_student_status.php",
+      formData,
+      {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      }
+    );
+    return response.data.message;
+  } catch (error) {
+    const message =
+      (axios.isAxiosError(error) && error.response?.data?.message) ||
+      "Unknown error";
     throw new Error(message);
   }
 }

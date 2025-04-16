@@ -17,11 +17,12 @@ function StudentsList({ students }: { students: StudentType[] }) {
             <th className="p-2 border">cv</th>
             <th className="p-2 border">Experience</th>
             <th className="p-2 border">Apply Status</th>
-            <th className="p-2 border">Interview Date</th>
             <th className="p-2 border">First Preference</th>
             <th className="p-2 border">Second Preference</th>
             <th className="p-2 border">Third Preference</th>
             <th className="p-2 border">Preferences percentage</th>
+            <th className="p-2 border">event source</th>
+            <th className="p-2 border">quiz score</th>
             <th className="p-2 border">Registered at</th>
           </tr>
         </thead>
@@ -29,7 +30,7 @@ function StudentsList({ students }: { students: StudentType[] }) {
           {(students ?? []).length === 0 ? (
             <tr>
               <td
-                colSpan={17}
+                colSpan={18}
                 className="lg:text-center p-10 md:text-4xl uppercase text-primary font-semibold"
               >
                 No students found 😢.
@@ -37,7 +38,7 @@ function StudentsList({ students }: { students: StudentType[] }) {
             </tr>
           ) : (
             (students ?? []).map((student: StudentType, idx) => (
-              <StudentItem student={student} idx={idx} />
+              <StudentItem student={student} idx={idx} key={idx} />
             ))
           )}
         </tbody>

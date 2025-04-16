@@ -3,8 +3,7 @@ import { fetchQuiz } from "../services/apiServices";
 import Spinner from "../ui/Spinner";
 import Error from "./Error";
 import { useEffect, useState } from "react";
-import NotFound from "./NotFound"; 
-import Question from "../features/Question"; 
+import Question from "../features/Question";
 import Button from "../ui/Button";
 import { useNavigate } from "react-router";
 import toast from "react-hot-toast";
@@ -33,7 +32,10 @@ function Quiz() {
   useEffect(() => {
     const handleBeforeUnload = () => {
       localStorage.setItem("submitOnLoad", "true");
-      localStorage.setItem("pendingQuizAnswersIndex", JSON.stringify(answersIndex));
+      localStorage.setItem(
+        "pendingQuizAnswersIndex",
+        JSON.stringify(answersIndex)
+      );
     };
 
     window.addEventListener("beforeunload", handleBeforeUnload);
@@ -58,7 +60,9 @@ function Quiz() {
 
     const onBlur = () => {
       if (!hasSubmitted) {
-        alert("Tab switching or screen recording is not allowed. The quiz will be submitted.");
+        alert(
+          "Tab switching or screen recording is not allowed. The quiz will be submitted."
+        );
         hasSubmitted = true;
         localStorage.setItem("submitOnLoad", "true");
         autoSubmit();
@@ -97,8 +101,9 @@ function Quiz() {
     if (shouldSubmit && savedAnswersIndex) {
       const parsedAnswersIndex = JSON.parse(savedAnswersIndex);
       addQuiz({
-        hash_code: "bfb172abf98b065092a9146afb96208d8a37f3db4e96a782691529f6f852906a",
-        answersIndex: parsedAnswersIndex
+        hash_code:
+          "bfb172abf98b065092a9146afb96208d8a37f3db4e96a782691529f6f852906a",
+        answersIndex: parsedAnswersIndex,
       });
 
       toast.success("Quiz auto-submitted due to reload or switching tabs.");
@@ -111,7 +116,11 @@ function Quiz() {
     }
   };
 
-  const { data, error, isLoading: isFetchingQuiz } = useQuery<QuestionType[]>({
+  const {
+    data,
+    error,
+    isLoading: isFetchingQuiz,
+  } = useQuery<QuestionType[]>({
     queryKey: ["quiz"],
     queryFn: () =>
       fetchQuiz(
@@ -122,9 +131,12 @@ function Quiz() {
   if (error) return <Error message="Can not fetch quiz" />;
   if (isFetchingQuiz) return <Spinner />;
 
-  const easyQuestions = data?.filter((q) => q.level === "easy").slice(0, 5) || [];
-  const mediumQuestions = data?.filter((q) => q.level === "medium").slice(0, 5) || [];
-  const hardQuestions = data?.filter((q) => q.level === "hard").slice(0, 5) || [];
+  const easyQuestions =
+    data?.filter((q) => q.level === "easy").slice(0, 5) || [];
+  const mediumQuestions =
+    data?.filter((q) => q.level === "medium").slice(0, 5) || [];
+  const hardQuestions =
+    data?.filter((q) => q.level === "hard").slice(0, 5) || [];
 
   const handleChange = (id: number, value: string, index: string) => {
     const updatedAnswers = { ...answers, [id]: value };
@@ -134,7 +146,10 @@ function Quiz() {
     setAnswersIndex(updatedAnswersIndex);
 
     localStorage.setItem("pendingQuizAnswers", JSON.stringify(updatedAnswers));
-    localStorage.setItem("pendingQuizAnswersIndex", JSON.stringify(updatedAnswersIndex));
+    localStorage.setItem(
+      "pendingQuizAnswersIndex",
+      JSON.stringify(updatedAnswersIndex)
+    );
   };
 
   const onSubmit = () => {
@@ -144,7 +159,8 @@ function Quiz() {
     }
 
     addQuiz({
-      hash_code: "bfb172abf98b065092a9146afb96208d8a37f3db4e96a782691529f6f852906a",
+      hash_code:
+        "bfb172abf98b065092a9146afb96208d8a37f3db4e96a782691529f6f852906a",
       answersIndex,
     });
 
@@ -171,7 +187,10 @@ function Quiz() {
         </p>
         <div className="flex items-start gap-2 text-red-700 font-medium text-lg">
           <span>1.</span>
-          <p>Don't close your tab, otherwise the quiz will be submitted automatically.</p>
+          <p>
+            Don't close your tab, otherwise the quiz will be submitted
+            automatically.
+          </p>
         </div>
         <div className="flex items-start gap-2 text-red-700 font-medium text-lg">
           <span>2.</span>
@@ -179,7 +198,10 @@ function Quiz() {
         </div>
         <div className="flex items-start gap-2 text-red-700 font-medium text-lg">
           <span>3.</span>
-          <p>Don't reload or refresh, otherwise the quiz will be submitted automatically.</p>
+          <p>
+            Don't reload or refresh, otherwise the quiz will be submitted
+            automatically.
+          </p>
         </div>
       </div>
 
