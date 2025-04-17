@@ -15,6 +15,8 @@ import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { Toaster } from "react-hot-toast";
 import { lazy, Suspense } from "react";
 import PageSpinner from "./ui/PageSpinner";
+// import InterviewersData from "./pages/InterviewersData";
+const InterviewersData = lazy(() => import("./pages/InterviewersData"));
 const AppLayout = lazy(() => import("./ui/AppLayout"));
 const NotFound = lazy(() => import("./pages/NotFound"));
 const Data = lazy(() => import("./pages/Data"));
@@ -51,6 +53,7 @@ function App() {
               <Route path="/success" element={<Success />} />
             </Route>
             <Route path="/admin25" element={<Data />} />
+            <Route path="/admin50" element={<InterviewersData />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </Suspense>

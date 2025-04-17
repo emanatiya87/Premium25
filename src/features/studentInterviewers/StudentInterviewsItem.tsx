@@ -1,11 +1,6 @@
-import { format } from "date-fns";
-import { StudentType } from "../../types/form";
+import { format, isPast, isToday } from "date-fns";
+import { StudentTypeWithInterview } from "../../types/form";
 
-const status = {
-  Accepted: "bg-green-200 text-green-800",
-  Rejected: "bg-red-200 text-red-800",
-  Pending: "bg-yellow-200 text-black",
-};
 const studentyear = {
   engineering: {
     1: "freshman",
@@ -16,15 +11,42 @@ const studentyear = {
   },
   other: { 1: "1st", 2: "2nd", 3: "3rd", 4: "4th" },
 };
-function StudentItem({ student, idx }: { student: StudentType; idx: number }) {
+function StudentInterviewsItem({
+  student,
+  idx,
+}: {
+  student: StudentTypeWithInterview;
+  idx: number;
+}) {
   return (
     <tr
       key={idx}
-      className={`hover:bg-gray-50 text-center h-20  ${
-        idx % 2 == 1 ? "bg-gray-200" : ""
+      className={` text-center h-20  ${idx % 2 == 1 ? "bg-gray-200" : ""}  ${
+        isToday(new Date(student.interview_date))
+          ? "bg-green-200 font-medium"
+          : ""
       } `}
     >
+      <td className="p-2 border text-nowrap">{student.interviewer_name}</td>
       <td className="p-2 border text-nowrap">{student.name}</td>
+      <td className="p-2 border text-nowrap">
+        {format(new Date(student.interview_date), "eee MM/dd hh:mm aa")}
+        {isPast(new Date(student.interview_date)) &&
+        !isToday(new Date(student.interview_date)) ? (
+          <span className="text-red-500 font-semibold ml-2 uppercase">
+            passed
+          </span>
+        ) : (
+          ""
+        )}
+        {isToday(new Date(student.interview_date)) ? (
+          <span className="text-green-500 font-semibold ml-2 uppercase">
+            today
+          </span>
+        ) : (
+          ""
+        )}
+      </td>
       <td className="p-2 border text-nowrap">{student.phone}</td>
       <td className="p-2 border text-nowrap">{student.email}</td>
       <td className="p-2 border">{student.university}</td>
@@ -57,13 +79,7 @@ function StudentItem({ student, idx }: { student: StudentType; idx: number }) {
           {student.experience}
         </div>
       </td>
-      <td
-        className={`p-2 px-4 border ${
-          status[student.apply_status as keyof typeof status]
-        }`}
-      >
-        {student.apply_status}
-      </td>
+
       <td className="p-2 border">{student.first_pref || "not chosen"}</td>
       <td className="p-2 border">{student.second_pref || "not chosen"}</td>
       <td className="p-2 border">{student.third_pref || "not chosen"}</td>
@@ -82,4 +98,4 @@ function StudentItem({ student, idx }: { student: StudentType; idx: number }) {
   );
 }
 
-export default StudentItem;
+export default StudentInterviewsItem;

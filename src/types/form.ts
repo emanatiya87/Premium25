@@ -32,7 +32,7 @@ export type StudentType = {
   event_source: string;
   experience: string;
   first_pref: string | null;
-  interview_date: Date | null;
+
   major: string;
   name: string;
   phone: string;
@@ -41,4 +41,10 @@ export type StudentType = {
   third_pref: string | null;
   university: string;
   year: number;
+  score: string | null;
+};
+
+export type StudentTypeWithInterview = StudentType & {
+  interviewer_name: string;
+  interview_date: Date;
 };

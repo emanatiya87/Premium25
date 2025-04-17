@@ -1,5 +1,10 @@
 import axios from "axios";
-import { companiesType, FormType, StudentType } from "../types/form";
+import {
+  companiesType,
+  FormType,
+  StudentType,
+  StudentTypeWithInterview,
+} from "../types/form";
 
 interface QuizResponse {
   score: string;
@@ -250,4 +255,16 @@ export async function changeStatus(formData: { phone: string }) {
       "Unknown error";
     throw new Error(message);
   }
+}
+
+export async function getStudentInterviews(
+  searchQuery: string
+): Promise<StudentTypeWithInterview[]> {
+  const response = await axios.get(
+    `https://apeceg.com/Events2025/get_students_interviews.php?search=${searchQuery}`
+  );
+  if (response.status !== 200 || !response.data) {
+    throw new Error("Failed to fetch students data");
+  }
+  return response.data.students;
 }
