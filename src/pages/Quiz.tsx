@@ -3,11 +3,15 @@ import { fetchQuiz } from "../services/apiServices";
 import Spinner from "../ui/Spinner";
 import Error from "./Error";
 import { useEffect, useState } from "react";
-import Question from "../features/Question";
+import Question from "../features/quizPage/Question";
 import Button from "../ui/Button";
 import { useNavigate } from "react-router";
 import toast from "react-hot-toast";
-import { useAddQuiz } from "../features/useAddStudentQuiz";
+import { useAddQuiz } from "../features/quizPage/useAddStudentQuiz";
+import { useSearchParams } from "react-router";
+import NotFound from "./NotFound";
+import { useAutoSubmit } from "../features/quizPage/useAutoSubmit";
+
 
 export interface QuestionType {
   id: number;
@@ -22,12 +26,26 @@ export interface QuestionType {
 
 function Quiz() {
   const navigate = useNavigate();
-  const [timer, setTimer] = useState(1 * 60);
+  const [timer, setTimer] = useState(0.8* 60);
   const minutes = Math.floor(timer / 60);
   const seconds = timer % 60;
   const { isLoading, addQuiz } = useAddQuiz();
   const [answers, setAnswers] = useState<Record<number, string>>({});
   const [answersIndex, setAnswersIndex] = useState<Record<number, string>>({});
+
+  const [searchParams] = useSearchParams();
+  const studentId = searchParams.get('id');
+  const hash_code = searchParams.get('code') as string;
+  const { handleSubmit } = useAutoSubmit(hash_code, timer, addQuiz); 
+
+  if (!studentId && !hash_code) return <NotFound />;
+  const { data, error, isLoading: isFetchingQuiz, } = useQuery<QuestionType[]>({
+    queryKey: ["quiz"],
+    queryFn: () =>
+      fetchQuiz(
+        hash_code
+      ),
+  });
 
   useEffect(() => {
     const handleBeforeUnload = () => {
@@ -37,25 +55,6 @@ function Quiz() {
         JSON.stringify(answersIndex)
       );
     };
-
-    window.addEventListener("beforeunload", handleBeforeUnload);
-    return () => window.removeEventListener("beforeunload", handleBeforeUnload);
-  }, [answersIndex]);
-
-  useEffect(() => {
-    const time = setInterval(() => {
-      setTimer((prev) => prev - 1);
-    }, 1000);
-    return () => clearInterval(time);
-  }, []);
-
-  useEffect(() => {
-    if (timer === 0) {
-      onSubmit();
-    }
-  }, [timer]);
-
-  useEffect(() => {
     let hasSubmitted = false;
 
     const onBlur = () => {
@@ -65,12 +64,15 @@ function Quiz() {
         );
         hasSubmitted = true;
         localStorage.setItem("submitOnLoad", "true");
-        autoSubmit();
+        localStorage.setItem(
+          "pendingQuizAnswersIndex",
+          JSON.stringify(answersIndex)
+        );
+        handleSubmit();
       }
     };
 
     const handleContextMenu = (e: MouseEvent) => e.preventDefault();
-
     const handleKeyDown = (e: KeyboardEvent) => {
       if (
         e.key === "PrintScreen" ||
@@ -78,55 +80,75 @@ function Quiz() {
       ) {
         e.preventDefault();
         alert("Screenshots are not allowed.");
+        localStorage.setItem("submitOnLoad", "true");
+        localStorage.setItem(
+          "pendingQuizAnswersIndex",
+          JSON.stringify(answersIndex)
+        );
+
       }
     };
 
+    window.addEventListener("beforeunload", handleBeforeUnload);
     window.addEventListener("blur", onBlur);
     document.addEventListener("contextmenu", handleContextMenu);
     document.addEventListener("keydown", handleKeyDown);
 
-    autoSubmit();
+    handleSubmit();
 
     return () => {
+      window.removeEventListener("beforeunload", handleBeforeUnload);
       window.removeEventListener("blur", onBlur);
       document.removeEventListener("contextmenu", handleContextMenu);
       document.removeEventListener("keydown", handleKeyDown);
     };
+  }, [answersIndex]);
+
+  useEffect(() => {
+    const time = setInterval(() => {
+      setTimer((prev) => prev - 1);
+      localStorage.setItem("timer", time.toString()); 
+    }, 1000);
+    return () => clearInterval(time);
   }, []);
 
-  const autoSubmit = () => {
-    const shouldSubmit = localStorage.getItem("submitOnLoad") === "true";
-    const savedAnswersIndex = localStorage.getItem("pendingQuizAnswersIndex");
-
-    if (shouldSubmit && savedAnswersIndex) {
-      const parsedAnswersIndex = JSON.parse(savedAnswersIndex);
-      addQuiz({
-        hash_code:
-          "bfb172abf98b065092a9146afb96208d8a37f3db4e96a782691529f6f852906a",
-        answersIndex: parsedAnswersIndex,
-      });
-
-      toast.success("Quiz auto-submitted due to reload or switching tabs.");
-
-      localStorage.removeItem("submitOnLoad");
-      localStorage.removeItem("pendingQuizAnswers");
-      localStorage.removeItem("pendingQuizAnswersIndex");
-
-      navigate("/ThankYou");
+  useEffect(() => {
+    if (timer === 0) {
+      localStorage.setItem("submitOnLoad", "true");
+      localStorage.setItem(
+        "pendingQuizAnswersIndex",
+        JSON.stringify(answersIndex)
+      );
+      handleSubmit();
     }
-  };
+  }, [timer]);
 
-  const {
-    data,
-    error,
-    isLoading: isFetchingQuiz,
-  } = useQuery<QuestionType[]>({
-    queryKey: ["quiz"],
-    queryFn: () =>
-      fetchQuiz(
-        "bfb172abf98b065092a9146afb96208d8a37f3db4e96a782691529f6f852906a"
-      ),
-  });
+
+  // const autoSubmit = () => {
+  //   const shouldSubmit = localStorage.getItem("submitOnLoad") === "true";
+  //   const savedAnswersIndex = localStorage.getItem("pendingQuizAnswersIndex");
+
+  //   if (shouldSubmit && savedAnswersIndex) {
+  //     const parsedAnswersIndex = JSON.parse(savedAnswersIndex);
+  //     addQuiz({
+  //       hash_code,
+  //       answersIndex: parsedAnswersIndex,
+  //     });
+
+  //     toast.success(
+  //       timer === 0
+  //         ? "Time is up. Your quiz has been auto-submitted."
+  //         : "Quiz auto-submitted due to reload or switching tabs."
+  //     );
+
+  //     localStorage.removeItem("submitOnLoad");
+  //     localStorage.removeItem("pendingQuizAnswers");
+  //     localStorage.removeItem("pendingQuizAnswersIndex");
+
+  //     navigate("/ThankYou", { replace: true });
+  //   }
+  // };
+
 
   if (error) return <Error message="Can not fetch quiz" />;
   if (isFetchingQuiz) return <Spinner />;
@@ -159,8 +181,7 @@ function Quiz() {
     }
 
     addQuiz({
-      hash_code:
-        "bfb172abf98b065092a9146afb96208d8a37f3db4e96a782691529f6f852906a",
+      hash_code,
       answersIndex,
     });
 
@@ -170,7 +191,7 @@ function Quiz() {
     localStorage.removeItem("pendingQuizAnswersIndex");
     localStorage.removeItem("submitOnLoad");
 
-    navigate("/ThankYou");
+    navigate("/ThankYou", { replace: true });
   };
 
   return (

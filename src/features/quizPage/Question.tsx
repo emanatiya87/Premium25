@@ -1,7 +1,7 @@
 import { ChangeEvent } from 'react';
-import { QuestionType } from '../pages/Quiz';
-import InputCol from '../ui/InputCol';
-import InputGroup from '../ui/InputGroup';
+import { QuestionType } from '../../pages/Quiz';
+import InputCol from '../../ui/InputCol';
+import InputGroup from '../../ui/InputGroup';
 import { toast } from 'react-hot-toast';
 
 
