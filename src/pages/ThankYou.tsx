@@ -15,7 +15,7 @@ function ThankYou() {
       >
         🎉 Thank You!
       </h2>
-      <p className="text-lg text-gray-700 mb-6 capitalize">
+      <p className="text-lg mb-6 capitalize">
         Your {submittedItem} has been submitted successfully.
         <br /> We appreciate your time and effort!
       </p>

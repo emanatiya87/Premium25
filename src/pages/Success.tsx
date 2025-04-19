@@ -14,8 +14,8 @@ function Success() {
       <h3 className="uppercase text-center text-3xl  text-primary font-bold  tracking-[5px] lg:tracking-[10px] ">
         Congratulations !{" "}
       </h3>
-      <p className="capitalize text-center text-lg lg:text-2xl my-3 ">
-        you on a one step from complete your application
+      <p className=" text-center text-lg lg:text-2xl my-3 ">
+        You are one step away from completing your application.
       </p>
       <div className="flex justify-around items-end mt-10 flex-wrap">
         {studentData.cv === "Pending" && (
@@ -25,7 +25,7 @@ function Success() {
             </p>
             <QRCode
               className="m-auto my-4"
-              value={`/uploadcv?id=${studentData.student_id}&code=${studentData.hash_code}`}
+              value={`https://apeceg.com/APEC-Premium-2025/uploadcv?id=${studentData.student_id}&code=${studentData.hash_code}`}
               size={200}
             />
             <p className="  mb-2 text-lg"> or use this link </p>
@@ -42,7 +42,7 @@ function Success() {
 
           <QRCode
             className="m-auto my-4"
-            value={`/quiz?id=${studentData.student_id}&code=${studentData.hash_code}`}
+            value={`https://apeceg.com/APEC-Premium-2025/quiz?id=${studentData.student_id}&code=${studentData.hash_code}`}
             size={200}
           />
 
@@ -54,7 +54,7 @@ function Success() {
         </div>
       </div>
 
-      <p className="text-center text-sm text-gray-700 mt-4 ">
+      <p className="text-center text-sm text-gray-700 mt-4  font-semibold">
         * mail with these links will send to you automatically but for more
         safety bookmark this page *
       </p>
