@@ -3,6 +3,7 @@ import InputGroup from "../../ui/InputGroup";
 import InputCol from "../../ui/InputCol";
 const faculties = {
   engineering: ["freshman", "sophomore", "junior", "senior1", "senior2"],
+  computerscience: ["first year", "second year", "third year", "fourth year"],
   business: ["first year", "second year", "third year", "fourth year"],
   medicine: [
     "first year",
@@ -12,7 +13,7 @@ const faculties = {
     "fifth year",
     "sixth year",
   ],
-  arts: ["first year", "second year", "third year", "fourth year"],
+
   other: ["first year", "second year", "third year", "fourth year"],
 };
 // const allMajors = [
@@ -35,7 +36,6 @@ const depertments = [
   "Architectural",
   "Mechanical production",
   "Mechanical (Power / Energy)",
-  "Mechanical Production",
   "Mechanical Automtive",
   "Mechanical Mechatronics",
   "Electrical Computer",
@@ -60,12 +60,12 @@ const majors = {
 function Step2() {
   // const all = allMajors.join(",").replace(/ /g, "_");
   // console.log(all);
-
   const {
     register,
     watch,
     formState: { errors },
   } = useFormContext();
+
   return (
     <>
       <InputGroup>

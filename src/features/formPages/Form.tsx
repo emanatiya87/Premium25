@@ -48,6 +48,8 @@ function Form({
     // console.log(methods.getValues("firstPreference"));
 
     methods.trigger(validateSteps[currentStep]).then((isValid) => {
+      // console.log(methods.getValues("firstPreference"));
+
       if (isValid) {
         if (
           currentStep == 3 &&

@@ -1,4 +1,4 @@
-import { format } from "date-fns";
+import { addHours, format } from "date-fns";
 import { StudentType } from "../../types/form";
 
 const status = {
@@ -75,7 +75,10 @@ function StudentItem({ student, idx }: { student: StudentType; idx: number }) {
       </td>
       <td className="p-2 border text-nowrap">
         {student.created_at
-          ? format(new Date(student.created_at), "eee MM/dd hh:mm aa")
+          ? format(
+              addHours(new Date(student.created_at), 2),
+              "eee MM/dd hh:mm aa"
+            )
           : "not chosen yet"}
       </td>
     </tr>

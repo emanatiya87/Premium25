@@ -18,23 +18,31 @@ function Step3() {
   } = useQuery({
     queryKey: [
       "companies",
-      watch("year") === "1" ? "other" : watch("major"),
+      watch("faculty") === "engineering"
+        ? watch("year") === "1"
+          ? "other"
+          : watch("major")
+        : watch("faculty"),
       watch("year"),
     ],
     queryFn: () =>
       getCompanies(
-        watch("year") === "1" ? "other" : watch("major"),
+        watch("faculty") === "engineering"
+          ? watch("year") === "1"
+            ? "other"
+            : watch("major")
+          : watch("faculty"),
         watch("year")
       ),
 
-    enabled: !!watch("year"),
+    // enabled: !!watch("year"),
   });
 
   if (isLoading) return <Spinner />;
   if (error || !companies || companies.length === 0)
     return (
       <p className="text-3xl text-center my-10">
-        No Compaines Available Now 😒
+        Oops! No Companies Here Right Now. 🙃
       </p>
     );
 
