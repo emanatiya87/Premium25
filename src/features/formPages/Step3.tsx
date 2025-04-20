@@ -45,6 +45,9 @@ function Step3() {
         Oops! No Companies Here Right Now. 🙃
       </p>
     );
+  const sortedCompanies = companies?.sort((a, b) =>
+    a.name.localeCompare(b.name)
+  );
 
   return (
     <>
@@ -58,7 +61,7 @@ function Step3() {
             className="form-input"
           >
             <option value="def">Select your first preference</option>
-            {companies.map(({ id, name }) => {
+            {sortedCompanies.map(({ id, name }) => {
               if (
                 watch("secondPreference") == id ||
                 watch("thirdPreference") == id
@@ -79,20 +82,20 @@ function Step3() {
             {String(errors?.firstPreference?.message)}
           </p>
         </InputCol>
-        {companies.length > 1 && (
+        {sortedCompanies.length > 1 && (
           <InputCol>
             <select
               {...register("secondPreference", {
-                required: companies.length > 1,
+                required: sortedCompanies.length > 1,
                 validate: (value) =>
                   value !== "def" ||
-                  companies.length < 2 ||
+                  sortedCompanies.length < 2 ||
                   "Please select a company",
               })}
               className="form-input"
             >
               <option value="def">Select your second preference</option>
-              {companies.map(({ id, name }) => {
+              {sortedCompanies.map(({ id, name }) => {
                 if (
                   watch("firstPreference") == id ||
                   watch("thirdPreference") == id
@@ -116,20 +119,20 @@ function Step3() {
         )}
       </InputGroup>
       <InputGroup>
-        {companies.length > 2 && (
+        {sortedCompanies.length > 2 && (
           <InputCol>
             <select
               {...register("thirdPreference", {
-                required: companies.length > 2,
+                required: sortedCompanies.length > 2,
                 validate: (value) =>
                   value !== "def" ||
-                  companies.length < 3 ||
+                  sortedCompanies.length < 3 ||
                   "Please select a company",
               })}
               className="form-input"
             >
               <option value="def">Select your third preference</option>
-              {companies.map(({ id, name }) => {
+              {sortedCompanies.map(({ id, name }) => {
                 if (
                   watch("firstPreference") == id ||
                   watch("secondPreference") == id
