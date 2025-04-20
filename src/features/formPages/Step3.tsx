@@ -79,74 +79,79 @@ function Step3() {
             {String(errors?.firstPreference?.message)}
           </p>
         </InputCol>
-        <InputCol>
-          <select
-            {...register("secondPreference", {
-              required: companies.length > 1,
-              validate: (value) =>
-                value !== "def" ||
-                companies.length < 2 ||
-                "Please select a company",
-            })}
-            className="form-input"
-          >
-            <option value="def">Select your second preference</option>
-            {companies.map(({ id, name }) => {
-              if (
-                watch("firstPreference") == id ||
-                watch("thirdPreference") == id
-              )
-                return null;
-              return (
-                <option key={id} value={id}>
-                  {name}
-                </option>
-              );
-            })}
-          </select>
-          <p
-            className={` ${
-              errors.secondPreference ? "visible" : "invisible"
-            }  text-red-500 text-sm mt-2 pl-1"`}
-          >
-            {String(errors?.secondPreference?.message)}
-          </p>
-        </InputCol>
+        {companies.length > 1 && (
+          <InputCol>
+            <select
+              {...register("secondPreference", {
+                required: companies.length > 1,
+                validate: (value) =>
+                  value !== "def" ||
+                  companies.length < 2 ||
+                  "Please select a company",
+              })}
+              className="form-input"
+            >
+              <option value="def">Select your second preference</option>
+              {companies.map(({ id, name }) => {
+                if (
+                  watch("firstPreference") == id ||
+                  watch("thirdPreference") == id
+                )
+                  return null;
+                return (
+                  <option key={id} value={id}>
+                    {name}
+                  </option>
+                );
+              })}
+            </select>
+            <p
+              className={` ${
+                errors.secondPreference ? "visible" : "invisible"
+              }  text-red-500 text-sm mt-2 pl-1"`}
+            >
+              {String(errors?.secondPreference?.message)}
+            </p>
+          </InputCol>
+        )}
       </InputGroup>
       <InputGroup>
-        <InputCol>
-          <select
-            {...register("thirdPreference", {
-              required: companies.length > 2,
-              validate: (value) =>
-                value !== "def" ||
-                companies.length < 3 ||
-                "Please select a company",
-            })}
-            className="form-input"
-          >
-            <option value="def">Select your third preference</option>
-            {companies.map(({ id, name }) => {
-              if (
-                watch("firstPreference") == id ||
-                watch("secondPreference") == id
-              )
-                return null;
-              return (
-                <option key={id} value={id}>
-                  {name}
-                </option>
-              );
-            })}
-          </select>
-          <p
-            className={` ${
-              errors.thirdPreference ? "visible" : "invisible"
-            }  text-red-500 text-sm mt-2 pl-1"`}
-          >
-            {String(errors?.thirdPreference?.message)}
-          </p>
-        </InputCol>
+        {companies.length > 2 && (
+          <InputCol>
+            <select
+              {...register("thirdPreference", {
+                required: companies.length > 2,
+                validate: (value) =>
+                  value !== "def" ||
+                  companies.length < 3 ||
+                  "Please select a company",
+              })}
+              className="form-input"
+            >
+              <option value="def">Select your third preference</option>
+              {companies.map(({ id, name }) => {
+                if (
+                  watch("firstPreference") == id ||
+                  watch("secondPreference") == id
+                )
+                  return null;
+                return (
+                  <option key={id} value={id}>
+                    {name}
+                  </option>
+                );
+              })}
+            </select>
+            <p
+              className={` ${
+                errors.thirdPreference ? "visible" : "invisible"
+              }  text-red-500 text-sm mt-2 pl-1"`}
+            >
+              {String(errors?.thirdPreference?.message)}
+            </p>
+          </InputCol>
+        )}
+
         <InputCol>
           <select
             {...register("preferencePercentage", {
