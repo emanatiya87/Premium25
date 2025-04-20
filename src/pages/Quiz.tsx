@@ -10,7 +10,6 @@ import toast from "react-hot-toast";
 import { useAddQuiz } from "../features/quizPage/useAddStudentQuiz";
 import { useSearchParams } from "react-router";
 import NotFound from "./NotFound";
-import { useAutoSubmit } from "../features/quizPage/useAutoSubmit";
 
 
 export interface QuestionType {
@@ -26,7 +25,7 @@ export interface QuestionType {
 
 function Quiz() {
   const navigate = useNavigate();
-  const [timer, setTimer] = useState(0.8* 60);
+  const [timer, setTimer] = useState(0.8 * 60);
   const minutes = Math.floor(timer / 60);
   const seconds = timer % 60;
   const { isLoading, addQuiz } = useAddQuiz();
@@ -36,11 +35,10 @@ function Quiz() {
   const [searchParams] = useSearchParams();
   const studentId = searchParams.get('id');
   const hash_code = searchParams.get('code') as string;
-  const { handleSubmit } = useAutoSubmit(hash_code, timer, addQuiz); 
 
-  if (!studentId && !hash_code) return <NotFound />;
-  const { data, error, isLoading: isFetchingQuiz, } = useQuery<QuestionType[]>({
-    queryKey: ["quiz"],
+  
+  const { data, error, isLoading: isFetchingQuiz, } = useQuery({
+    queryKey: ["quiz",hash_code],
     queryFn: () =>
       fetchQuiz(
         hash_code
@@ -68,7 +66,7 @@ function Quiz() {
           "pendingQuizAnswersIndex",
           JSON.stringify(answersIndex)
         );
-        handleSubmit();
+        autoSubmit();
       }
     };
 
@@ -93,8 +91,9 @@ function Quiz() {
     window.addEventListener("blur", onBlur);
     document.addEventListener("contextmenu", handleContextMenu);
     document.addEventListener("keydown", handleKeyDown);
-
-    handleSubmit();
+    if (localStorage.getItem("submitOnLoad") === "true") {
+      autoSubmit();
+    }
 
     return () => {
       window.removeEventListener("beforeunload", handleBeforeUnload);
@@ -107,7 +106,7 @@ function Quiz() {
   useEffect(() => {
     const time = setInterval(() => {
       setTimer((prev) => prev - 1);
-      localStorage.setItem("timer", time.toString()); 
+      localStorage.setItem("timer", time.toString());
     }, 1000);
     return () => clearInterval(time);
   }, []);
@@ -119,46 +118,36 @@ function Quiz() {
         "pendingQuizAnswersIndex",
         JSON.stringify(answersIndex)
       );
-      handleSubmit();
+      autoSubmit();
     }
   }, [timer]);
 
 
-  // const autoSubmit = () => {
-  //   const shouldSubmit = localStorage.getItem("submitOnLoad") === "true";
-  //   const savedAnswersIndex = localStorage.getItem("pendingQuizAnswersIndex");
+  const autoSubmit = () => {
+    const shouldSubmit = localStorage.getItem("submitOnLoad") === "true";
+    const savedAnswersIndex = localStorage.getItem("pendingQuizAnswersIndex");
 
-  //   if (shouldSubmit && savedAnswersIndex) {
-  //     const parsedAnswersIndex = JSON.parse(savedAnswersIndex);
-  //     addQuiz({
-  //       hash_code,
-  //       answersIndex: parsedAnswersIndex,
-  //     });
+    if (shouldSubmit && savedAnswersIndex) {
+      const parsedAnswersIndex = JSON.parse(savedAnswersIndex);
+      addQuiz({
+        hash_code,
+        answersIndex: parsedAnswersIndex,
+      });
 
-  //     toast.success(
-  //       timer === 0
-  //         ? "Time is up. Your quiz has been auto-submitted."
-  //         : "Quiz auto-submitted due to reload or switching tabs."
-  //     );
+      toast.success(
+        timer === 0
+          ? "Time is up. Your quiz has been auto-submitted."
+          : "Quiz auto-submitted due to reload or switching tabs."
+      );
 
-  //     localStorage.removeItem("submitOnLoad");
-  //     localStorage.removeItem("pendingQuizAnswers");
-  //     localStorage.removeItem("pendingQuizAnswersIndex");
+      localStorage.removeItem("submitOnLoad");
+      localStorage.removeItem("pendingQuizAnswers");
+      localStorage.removeItem("pendingQuizAnswersIndex");
 
-  //     navigate("/ThankYou", { replace: true });
-  //   }
-  // };
+      navigate("/ThankYou", { replace: true });
+    }
+  };
 
-
-  if (error) return <Error message="Can not fetch quiz" />;
-  if (isFetchingQuiz) return <Spinner />;
-
-  const easyQuestions =
-    data?.filter((q) => q.level === "easy").slice(0, 5) || [];
-  const mediumQuestions =
-    data?.filter((q) => q.level === "medium").slice(0, 5) || [];
-  const hardQuestions =
-    data?.filter((q) => q.level === "hard").slice(0, 5) || [];
 
   const handleChange = (id: number, value: string, index: string) => {
     const updatedAnswers = { ...answers, [id]: value };
@@ -175,7 +164,7 @@ function Quiz() {
   };
 
   const onSubmit = () => {
-    if (Object.keys(answersIndex).filter((val) => val !== "").length !== 15) {
+    if (Object.keys(answersIndex).filter((val) => val !== "").length !== (Array.isArray(data)?data.length:0)) {
       toast.error("Please answer all questions");
       return;
     }
@@ -193,7 +182,13 @@ function Quiz() {
 
     navigate("/ThankYou", { replace: true });
   };
-
+  
+  if (!studentId && !hash_code) return <NotFound />;
+  if (data&&!Array.isArray(data)) return <Error message="the quiz was submitted" />;
+  if (error) return <Error message="Cannot fetch quiz" />;
+  if (isFetchingQuiz) return <Spinner />;
+  
+  
   return (
     <section
       className="select-none bg-white w-[95%] lg:w-[85%] m-auto rounded-tl-[40px] rounded-br-[40px] p-4 md:p-6 lg:p-10"
@@ -230,7 +225,7 @@ function Quiz() {
         Time left: {minutes}:{seconds < 10 ? `0${seconds}` : seconds}
       </p>
 
-      {[...easyQuestions, ...mediumQuestions, ...hardQuestions].map((q) => (
+      {data?.map((q) => (
         <Question
           key={q.id}
           q={q}
