@@ -11,7 +11,6 @@ import { useAddQuiz } from "../features/quizPage/useAddStudentQuiz";
 import { useSearchParams } from "react-router";
 import NotFound from "./NotFound";
 
-
 export interface QuestionType {
   id: number;
   question: string;
@@ -21,14 +20,15 @@ export interface QuestionType {
   option_b: string;
   option_c: string;
   option_d: string;
+  option_e: string;
 }
 
 function Quiz() {
   const navigate = useNavigate();
-  const [timer, setTimer] = useState(0.8 * 60);
+  const [timer, setTimer] = useState(45* 60);
   const minutes = Math.floor(timer / 60);
   const seconds = timer % 60;
-  const { isLoading, addQuiz } = useAddQuiz();
+  const { isLoading, isError, addQuiz } = useAddQuiz();
   const [answers, setAnswers] = useState<Record<number, string>>({});
   const [answersIndex, setAnswersIndex] = useState<Record<number, string>>({});
 
@@ -36,54 +36,36 @@ function Quiz() {
   const studentId = searchParams.get('id');
   const hash_code = searchParams.get('code') as string;
 
-  
-  const { data, error, isLoading: isFetchingQuiz, } = useQuery({
-    queryKey: ["quiz",hash_code],
-    queryFn: () =>
-      fetchQuiz(
-        hash_code
-      ),
+  const { data, error, isLoading: isFetchingQuiz } = useQuery({
+    queryKey: ["quiz", hash_code],
+    queryFn: () => fetchQuiz(hash_code),
   });
 
   useEffect(() => {
     const handleBeforeUnload = () => {
       localStorage.setItem("submitOnLoad", "true");
-      localStorage.setItem(
-        "pendingQuizAnswersIndex",
-        JSON.stringify(answersIndex)
-      );
+      localStorage.setItem("pendingQuizAnswersIndex", JSON.stringify(answersIndex));
     };
+
     let hasSubmitted = false;
 
     const onBlur = () => {
-      if (!hasSubmitted) {
-        alert(
-          "Tab switching or screen recording is not allowed. The quiz will be submitted."
-        );
+      if (!hasSubmitted&&localStorage.getItem(`quizSubmitted_${hash_code}`)!=="true"){
+        alert("Tab switching or screen recording is not allowed. The quiz will be submitted.");
         hasSubmitted = true;
         localStorage.setItem("submitOnLoad", "true");
-        localStorage.setItem(
-          "pendingQuizAnswersIndex",
-          JSON.stringify(answersIndex)
-        );
+        localStorage.setItem("pendingQuizAnswersIndex", JSON.stringify(answersIndex));
         autoSubmit();
       }
     };
 
     const handleContextMenu = (e: MouseEvent) => e.preventDefault();
     const handleKeyDown = (e: KeyboardEvent) => {
-      if (
-        e.key === "PrintScreen" ||
-        (e.ctrlKey && (e.key === "s" || e.key === "u"))
-      ) {
+      if (e.key === "PrintScreen" || (e.ctrlKey && (e.key === "s" || e.key === "u"))) {
         e.preventDefault();
         alert("Screenshots are not allowed.");
         localStorage.setItem("submitOnLoad", "true");
-        localStorage.setItem(
-          "pendingQuizAnswersIndex",
-          JSON.stringify(answersIndex)
-        );
-
+        localStorage.setItem("pendingQuizAnswersIndex", JSON.stringify(answersIndex));
       }
     };
 
@@ -91,6 +73,7 @@ function Quiz() {
     window.addEventListener("blur", onBlur);
     document.addEventListener("contextmenu", handleContextMenu);
     document.addEventListener("keydown", handleKeyDown);
+
     if (localStorage.getItem("submitOnLoad") === "true") {
       autoSubmit();
     }
@@ -106,22 +89,18 @@ function Quiz() {
   useEffect(() => {
     const time = setInterval(() => {
       setTimer((prev) => prev - 1);
-      localStorage.setItem("timer", time.toString());
     }, 1000);
+    console.log(error, data, isError);
     return () => clearInterval(time);
-  }, []);
+  }, [timer]);
 
   useEffect(() => {
     if (timer === 0) {
       localStorage.setItem("submitOnLoad", "true");
-      localStorage.setItem(
-        "pendingQuizAnswersIndex",
-        JSON.stringify(answersIndex)
-      );
+      localStorage.setItem("pendingQuizAnswersIndex", JSON.stringify(answersIndex));
       autoSubmit();
     }
   }, [timer]);
-
 
   const autoSubmit = () => {
     const shouldSubmit = localStorage.getItem("submitOnLoad") === "true";
@@ -129,16 +108,11 @@ function Quiz() {
 
     if (shouldSubmit && savedAnswersIndex) {
       const parsedAnswersIndex = JSON.parse(savedAnswersIndex);
-      addQuiz({
-        hash_code,
-        answersIndex: parsedAnswersIndex,
-      });
+      addQuiz({ hash_code, answersIndex: parsedAnswersIndex });
 
-      toast.success(
-        timer === 0
-          ? "Time is up. Your quiz has been auto-submitted."
-          : "Quiz auto-submitted due to reload or switching tabs."
-      );
+      toast.success(timer === 0 ? "Time is up. Your quiz has been auto-submitted." : "Quiz auto-submitted due to reload or switching tabs.");
+
+      //localStorage.setItem(`quizSubmitted_${hash_code}`, "true"); 
 
       localStorage.removeItem("submitOnLoad");
       localStorage.removeItem("pendingQuizAnswers");
@@ -148,7 +122,6 @@ function Quiz() {
     }
   };
 
-
   const handleChange = (id: number, value: string, index: string) => {
     const updatedAnswers = { ...answers, [id]: value };
     const updatedAnswersIndex = { ...answersIndex, [id]: index };
@@ -157,24 +130,20 @@ function Quiz() {
     setAnswersIndex(updatedAnswersIndex);
 
     localStorage.setItem("pendingQuizAnswers", JSON.stringify(updatedAnswers));
-    localStorage.setItem(
-      "pendingQuizAnswersIndex",
-      JSON.stringify(updatedAnswersIndex)
-    );
+    localStorage.setItem("pendingQuizAnswersIndex", JSON.stringify(updatedAnswersIndex));
   };
 
   const onSubmit = () => {
-    if (Object.keys(answersIndex).filter((val) => val !== "").length !== (Array.isArray(data)?data.length:0)) {
+    const unansweredQuestions = Object.keys(answersIndex).filter((val) => val !== "").length;
+    if (unansweredQuestions !== (Array.isArray(data)?data.length:0)) {
       toast.error("Please answer all questions");
       return;
     }
 
-    addQuiz({
-      hash_code,
-      answersIndex,
-    });
-
+    addQuiz({ hash_code, answersIndex });
     toast.success("Quiz submitted");
+
+   // localStorage.setItem(`quizSubmitted_${hash_code}`, "true"); 
 
     localStorage.removeItem("pendingQuizAnswers");
     localStorage.removeItem("pendingQuizAnswersIndex");
@@ -182,56 +151,25 @@ function Quiz() {
 
     navigate("/ThankYou", { replace: true });
   };
-  
-  if (!studentId && !hash_code) return <NotFound />;
-  if (data&&!Array.isArray(data)) return <Error message="the quiz was submitted" />;
-  if (error) return <Error message="Cannot fetch quiz" />;
-  if (isFetchingQuiz) return <Spinner />;
-  
-  
-  return (
-    <section
-      className="select-none bg-white w-[95%] lg:w-[85%] m-auto rounded-tl-[40px] rounded-br-[40px] p-4 md:p-6 lg:p-10"
-      aria-labelledby="quiz"
-    >
-      <h2 id="quiz" className="text-4xl font-bold mb-4">
-        Please answer the following questions
-      </h2>
-      <div className="flex flex-col gap-2 mb-6">
-        <p className="text-red-800 font-bold text-2xl">
-          Adhere to the following instructions please:
-        </p>
-        <div className="flex items-start gap-2 text-red-700 font-medium text-lg">
-          <span>1.</span>
-          <p>
-            Don't close your tab, otherwise the quiz will be submitted
-            automatically.
-          </p>
-        </div>
-        <div className="flex items-start gap-2 text-red-700 font-medium text-lg">
-          <span>2.</span>
-          <p>Screenshots are not allowed.</p>
-        </div>
-        <div className="flex items-start gap-2 text-red-700 font-medium text-lg">
-          <span>3.</span>
-          <p>
-            Don't reload or refresh, otherwise the quiz will be submitted
-            automatically.
-          </p>
-        </div>
-      </div>
 
+  if (!studentId || !hash_code) return <NotFound />;
+  if (isFetchingQuiz) return <Spinner />;
+  if (error) return <Error message="The quiz has already been submitted." />;
+  if (isError) return <Error message="Error fetching quiz" />;
+
+//if (localStorage.getItem(`quizSubmitted_${hash_code}`) === "true") {
+   // return <Error message="You have already submitted the quiz." />;
+  //}
+
+  return (
+    <section className="select-none bg-white w-[95%] lg:w-[85%] m-auto rounded-tl-[40px] rounded-br-[40px] p-4 md:p-6 lg:p-10" aria-labelledby="quiz">
+      <h2 id="quiz" className="text-4xl font-bold mb-4">Please answer the following questions</h2>
       <p className="text-red-600 font-bold text-xl text-center mt-6">
         Time left: {minutes}:{seconds < 10 ? `0${seconds}` : seconds}
       </p>
 
-      {data?.map((q) => (
-        <Question
-          key={q.id}
-          q={q}
-          setOnChange={handleChange}
-          selected={answers[q.id]}
-        />
+      {data && Array.isArray(data) && data.length > 0 && data.map((q) => (
+        <Question key={q.id} q={q} setOnChange={handleChange} selected={answers[q.id]} />
       ))}
 
       <Button type="submit" isLoading={isLoading} onClick={onSubmit}>

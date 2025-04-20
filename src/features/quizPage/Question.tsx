@@ -28,6 +28,9 @@ const Question = ({ q, setOnChange, selected }: QuestionProps) => {
       case 4:
         val = "option_d";
         break;
+        case 5:
+          val = "option_e";
+          break;
       default:
         toast.error("Select an option please")
         break;
@@ -54,6 +57,7 @@ const Question = ({ q, setOnChange, selected }: QuestionProps) => {
               <option value={q.option_b} >{q.option_b}</option>
               {q.option_c?.trim() && <option value={q.option_c} >{q.option_c}</option>}
               {q.option_d?.trim() && <option value={q.option_d} >{q.option_d}</option>}
+              {q.option_d?.trim() && <option value={q.option_e} >{q.option_e}</option>}
             </select>
           </InputCol>
         </InputGroup>

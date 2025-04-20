@@ -18,7 +18,7 @@ export interface QuizErrorResponse{
   error:string;
 }
 
-export async function fetchQuiz(hash_code: string): Promise<QuestionType| QuizErrorResponse>  {
+export async function fetchQuiz(hash_code: string)  {
   try {
     const res = await axios.get(
       `https://apeceg.com/Events2025/quiz_api.php?action=quiz&hash_code=${hash_code}`
@@ -27,12 +27,6 @@ export async function fetchQuiz(hash_code: string): Promise<QuestionType| QuizEr
     if (res.status !== 200 || !res.data) {
       throw new Error("Failed to fetch Quiz");
     }
-
-    
-    if (res.data.error === "Quiz already requested") {
-      return { error: "Quiz has already been submitted or requested." };
-    }
-
 
     return res.data;
   } catch (error: any) {
@@ -48,7 +42,7 @@ export async function addQuiz({
 }: {
   hash_code: string;
   answersIndex: Record<number, string>;
-}): Promise<QuizResponse> {
+}): Promise<QuizResponse | QuizErrorResponse> {
   const body = { hash_code, ...answersIndex };
   try {
     const res = await axios.post(
@@ -58,6 +52,10 @@ export async function addQuiz({
     if (res.status !== 200 || !res.data) {
       throw new Error("Failed to fetch quiz");
     }
+    if (res.data.error ) {
+      throw new Error("Quiz has already been submitted or requested.")
+    }
+
     return res.data;
   } catch (error) {
     throw error;
