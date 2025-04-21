@@ -90,7 +90,7 @@ function Quiz() {
     const time = setInterval(() => {
       setTimer((prev) => prev - 1);
     }, 1000);
-    console.log(error, data, isError);
+    //console.log(error, data, isError);
     return () => clearInterval(time);
   }, [timer]);
 
