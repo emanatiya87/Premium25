@@ -5,7 +5,7 @@ import {
   StudentType,
   StudentTypeWithInterview,
 } from "../types/form";
-import { QuestionType } from "../pages/Quiz";
+// import { QuestionType } from "../pages/Quiz";
 
 export interface QuizResponse {
   score: string;
@@ -14,11 +14,11 @@ export interface QuizResponse {
     [key: string]: number;
   };
 }
-export interface QuizErrorResponse{
-  error:string;
+export interface QuizErrorResponse {
+  error: string;
 }
 
-export async function fetchQuiz(hash_code: string)  {
+export async function fetchQuiz(hash_code: string) {
   try {
     const res = await axios.get(
       `https://apeceg.com/Events2025/quiz_api.php?action=quiz&hash_code=${hash_code}`
@@ -34,7 +34,6 @@ export async function fetchQuiz(hash_code: string)  {
     throw error;
   }
 }
-
 
 export async function addQuiz({
   hash_code,
@@ -52,8 +51,8 @@ export async function addQuiz({
     if (res.status !== 200 || !res.data) {
       throw new Error("Failed to fetch quiz");
     }
-    if (res.data.error ) {
-      throw new Error("Quiz has already been submitted or requested.")
+    if (res.data.error) {
+      throw new Error("Quiz has already been submitted or requested.");
     }
 
     return res.data;

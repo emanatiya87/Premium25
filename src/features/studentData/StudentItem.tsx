@@ -64,9 +64,23 @@ function StudentItem({ student, idx }: { student: StudentType; idx: number }) {
       >
         {student.apply_status}
       </td>
-      <td className="p-2 border">{student.first_pref || "not chosen"}</td>
-      <td className="p-2 border">{student.second_pref || "not chosen"}</td>
-      <td className="p-2 border">{student.third_pref || "not chosen"}</td>
+      <td className="p-2 border ">
+        <div className="text-wrap w-[200px] max-w-[300px] max-h-[200px] overflow-auto">
+          {student.first_pref?.slice(0, 50) || "not chosen"}
+        </div>
+      </td>
+      <td className="p-2 border">
+        {" "}
+        <div className="text-wrap w-[200px] max-w-[300px] max-h-[200px] overflow-auto">
+          {student.second_pref?.slice(0, 50) || "not chosen"}
+        </div>
+      </td>
+      <td className="p-2 border">
+        {" "}
+        <div className="text-wrap w-[200px] max-w-[300px] max-h-[200px] overflow-auto">
+          {student.third_pref?.slice(0, 50) || "not chosen"}
+        </div>
+      </td>
       <td className="p-2 border ">{student.pref_percentages}</td>
       <td className="p-2 border text-nowrap">{student.event_source}</td>
       <td className="p-2 border text-nowrap">

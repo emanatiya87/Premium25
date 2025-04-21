@@ -83,7 +83,7 @@ function UploadCv() {
         </div>
         <div className="flex items-center justify-center mt-20">
           <Button isLoading={isLoading} type="submit">
-            {isLoading ? "..." : "Submit"}
+            Submit
           </Button>
         </div>
       </form>
