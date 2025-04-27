@@ -1,11 +1,11 @@
-import { compareAsc } from "date-fns";
+// import { compareAsc } from "date-fns";
 import { StudentType } from "../../types/form";
 import StudentItem from "./StudentItem";
 
-function StudentsList({ students: sd }: { students: StudentType[] }) {
-  const students = sd.sort((a, b) =>
-    compareAsc(new Date(a.created_at), new Date(b.created_at))
-  );
+function StudentsList({ students }: { students: StudentType[] }) {
+  // const students = sd.sort((a, b) =>
+  //  )
+  // );
   return (
     <div className="overflow-x-auto">
       <table className="min-w-full w-full border border-gray-300">

@@ -15,7 +15,8 @@ import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { Toaster } from "react-hot-toast";
 import { lazy, Suspense } from "react";
 import PageSpinner from "./ui/PageSpinner";
-// import PauseQuiz from "./features/quizPage/PauseQuiz";
+// import EventEnd from "./pages/EventEnd";
+
 // import InterviewersData from "./pages/InterviewersData";
 const InterviewersData = lazy(() => import("./pages/InterviewersData"));
 const AppLayout = lazy(() => import("./ui/AppLayout"));
@@ -24,8 +25,8 @@ const Data = lazy(() => import("./pages/Data"));
 const Interview = lazy(() => import("./pages/Interview"));
 const PremiumForm = lazy(() => import("./pages/PremiumForm"));
 const UploadCv = lazy(() => import("./pages/UploadCv"));
-// const Quiz = lazy(() => import("./pages/Quiz"));
-const PauseQuiz = lazy(() => import("./features/quizPage/PauseQuiz"));
+const Quiz = lazy(() => import("./pages/Quiz"));
+const StartQuiz = lazy(() => import("./features/quizPage/StartQuiz"));
 const Success = lazy(() => import("./pages/Success"));
 const AddInterview = lazy(() => import("./pages/AddInterview"));
 const ChangeStatus = lazy(() => import("./pages/ChangeStatus"));
@@ -50,7 +51,8 @@ function App() {
               <Route path="/interviewslot" element={<Interview />} />
               <Route path="/add-interview" element={<AddInterview />} />
               <Route path="/change-status" element={<ChangeStatus />} />
-              <Route path="/quiz" element={<PauseQuiz />} />
+              <Route path="/quiz" element={<StartQuiz />} />
+              <Route path="/stquiz" element={<Quiz />} />
               <Route path="/ThankYou" element={<ThankYou />} />
               <Route path="/success" element={<Success />} />
             </Route>
