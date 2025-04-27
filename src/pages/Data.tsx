@@ -4,12 +4,15 @@ import { useStudentsData } from "../features/studentData/useStudentsData";
 import Button from "../ui/Button";
 import Spinner from "../ui/Spinner";
 import Error from "./Error";
+import { compareAsc, compareDesc } from "date-fns";
 
 function Data() {
   const [searchQuery, setSearchQuery] = useState<string>("");
   const [inputQ, setInputQ] = useState<string>("");
   const { isError, isLoading, students } = useStudentsData(searchQuery);
   const [currentPage, setCurrentPage] = useState<number>(1);
+  const [sortedDes, setSortDes] = useState<number>(0);
+  const [topScore, setTopScore] = useState<number>(0);
   function handleSearch(e: FormEvent) {
     e.preventDefault();
     setCurrentPage(1);
@@ -20,8 +23,30 @@ function Data() {
 
   const pageSize = 8;
   const startIndex = (currentPage - 1) * pageSize;
-  const paginatedStudents = students?.slice(startIndex, startIndex + pageSize);
+
+  console.log(sortedDes);
+  let paginatedStudents = students ?? [];
+  if (sortedDes === 1) {
+    paginatedStudents = paginatedStudents?.sort((a, b) =>
+      compareDesc(new Date(a.created_at), new Date(b.created_at))
+    );
+  } else {
+    paginatedStudents = paginatedStudents?.sort((a, b) =>
+      compareAsc(new Date(a.created_at), new Date(b.created_at))
+    );
+  }
+  if (topScore === 1) {
+    paginatedStudents = paginatedStudents?.sort(
+      (a, b) => Number(b.score) - Number(a.score)
+    );
+  }
+
+  paginatedStudents = paginatedStudents?.slice(
+    startIndex,
+    startIndex + pageSize
+  );
   // console.log(paginatedStudents);
+  console.log(paginatedStudents);
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-[#333333] to-[#8B1313] px-2 py-6 md:px-10 lg:p-20  space-y-10 ">
@@ -40,6 +65,29 @@ function Data() {
           onSubmit={handleSearch}
           className=" flex flex-col md:flex-row gap-y-1 lg:gap-x-4 w-full md:w-[50%] m-auto "
         >
+          <div className="flex items-center gap-x-2">
+            <label htmlFor="top" className="font-semibold text-sm capitalize  ">
+              top score first
+            </label>
+            <input
+              type="checkbox"
+              name="top"
+              value={topScore}
+              onChange={() => setTopScore((prev) => (prev === 0 ? 1 : 0))}
+            />
+          </div>
+          <div className="flex items-center gap-x-2">
+            <label htmlFor="ch" className="font-semibold text-sm capitalize  ">
+              last one first
+            </label>
+            <input
+              type="checkbox"
+              name="ch"
+              value={sortedDes}
+              onChange={() => setSortDes((prev) => (prev === 0 ? 1 : 0))}
+            />
+          </div>
+
           <input
             placeholder="student email or phone"
             type="text"

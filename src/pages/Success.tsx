@@ -56,14 +56,25 @@ function Success() {
 
       <p className="text-center text-sm text-gray-700 mt-4  font-semibold">
         * mail with these links will send to you automatically but for more
-        safety bookmark this page *
+        safety take screenshot for qr code and bookmark this page *
       </p>
-      <p className="text-center text-sm text-gray-700 mt-2  ">
-        * Please note the following: <br /> You are only allowed to take the PST
-        exam once. <br /> Do not refresh the exam page while taking it. <br />{" "}
-        Do not share this link with anyone. <br />
-        Be sure to access the exam before end of the event. *
-      </p>
+      <div className="text-center text-lg text-red-600 font-medium mt-4">
+        * Please note the following: *
+        <div className="text-left mt-2">
+          <p>*You are only allowed to take the PST exam once.</p>
+          <p>*Do not refresh the exam page while taking it.</p>
+          <p>*Do not share this link with anyone.</p>
+          <p>*Be sure to access the exam before the end of the event.</p>
+          <p>
+            *You are not allowed to switch tabs, minimize the window, copy any
+            content, or take screenshots during the exam.
+          </p>
+          <p className="text-red-600 font-bold mt-2">
+            Any such action will result in the immediate submission of your PST
+            .
+          </p>
+        </div>
+      </div>
     </div>
   );
 }
