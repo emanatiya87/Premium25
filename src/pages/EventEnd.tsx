@@ -8,7 +8,10 @@ function EventEnd() {
           {" "}
           The Event Has Come to an End!
         </h2>
-        <img className="w-96 m-auto" src="./7.svg" />
+        <img
+          className="w-96 m-auto"
+          src="https://apeceg.com/APEC-Premium-2025/7.svg"
+        />
         <p className="text-gray-600 mb-4">
           Follow our page to stay updated about upcoming events!
         </p>
