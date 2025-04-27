@@ -41,24 +41,78 @@ function Quiz() {
     queryFn: () => fetchQuiz(hash_code),
   });
 
+  // useEffect(() => {
+  //   const handleBeforeUnload = () => {
+  //     localStorage.setItem("submitOnLoad", "true");
+  //     localStorage.setItem("pendingQuizAnswersIndex", JSON.stringify(answersIndex));
+  //   };
+
+  //   let hasSubmitted = false;
+
+  //   const onBlur = () => {
+  //     if (!hasSubmitted)!=="true"){
+  //       alert("Tab switching or screen recording is not allowed. The quiz will be submitted.");
+  //       hasSubmitted = true;
+  //       localStorage.setItem("submitOnLoad", "true");
+  //       localStorage.setItem("pendingQuizAnswersIndex", JSON.stringify(answersIndex));
+  //       autoSubmit();
+  //     }
+  //   };
+
+  //   const handleContextMenu = (e: MouseEvent) => e.preventDefault();
+  //   const handleKeyDown = (e: KeyboardEvent) => {
+  //     if (e.key === "PrintScreen" || (e.ctrlKey && (e.key === "s" || e.key === "u"))) {
+  //       e.preventDefault();
+  //       alert("Screenshots are not allowed.");
+  //       localStorage.setItem("submitOnLoad", "true");
+  //       localStorage.setItem("pendingQuizAnswersIndex", JSON.stringify(answersIndex));
+  //     }
+  //   };
+
+  //   window.addEventListener("beforeunload", handleBeforeUnload);
+  //   window.addEventListener("blur", onBlur);
+  //   document.addEventListener("contextmenu", handleContextMenu);
+  //   document.addEventListener("keydown", handleKeyDown);
+
+  //   if (localStorage.getItem("submitOnLoad") === "true") {
+  //     autoSubmit();
+  //   }
+
+  //   return () => {
+  //     window.removeEventListener("beforeunload", handleBeforeUnload);
+  //     window.removeEventListener("blur", onBlur);
+  //     document.removeEventListener("contextmenu", handleContextMenu);
+  //     document.removeEventListener("keydown", handleKeyDown);
+  //   };
+  // }, [answersIndex]);
   useEffect(() => {
     const handleBeforeUnload = () => {
       localStorage.setItem("submitOnLoad", "true");
       localStorage.setItem("pendingQuizAnswersIndex", JSON.stringify(answersIndex));
     };
-
+  
     let hasSubmitted = false;
-
+    let blurTimeout: ReturnType<typeof setTimeout>;
+  
     const onBlur = () => {
-      if (!hasSubmitted&&localStorage.getItem(`quizSubmitted_${hash_code}`)!=="true"){
-        alert("Tab switching or screen recording is not allowed. The quiz will be submitted.");
-        hasSubmitted = true;
-        localStorage.setItem("submitOnLoad", "true");
-        localStorage.setItem("pendingQuizAnswersIndex", JSON.stringify(answersIndex));
-        autoSubmit();
+      if (!hasSubmitted) {
+
+        blurTimeout = setTimeout(() => {
+          if (document.visibilityState !== "visible" && !hasSubmitted) {
+            alert("You were away for too long. The quiz will be submitted.");
+            hasSubmitted = true;
+            localStorage.setItem("submitOnLoad", "true");
+            localStorage.setItem("pendingQuizAnswersIndex", JSON.stringify(answersIndex));
+            autoSubmit();
+          }
+        }, 10000); 
       }
     };
-
+  
+    const onFocus = () => {
+      clearTimeout(blurTimeout);
+    };
+  
     const handleContextMenu = (e: MouseEvent) => e.preventDefault();
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === "PrintScreen" || (e.ctrlKey && (e.key === "s" || e.key === "u"))) {
@@ -68,29 +122,33 @@ function Quiz() {
         localStorage.setItem("pendingQuizAnswersIndex", JSON.stringify(answersIndex));
       }
     };
-
+  
     window.addEventListener("beforeunload", handleBeforeUnload);
     window.addEventListener("blur", onBlur);
+    window.addEventListener("focus", onFocus);
     document.addEventListener("contextmenu", handleContextMenu);
     document.addEventListener("keydown", handleKeyDown);
-
+  
     if (localStorage.getItem("submitOnLoad") === "true") {
       autoSubmit();
     }
-
+  
     return () => {
       window.removeEventListener("beforeunload", handleBeforeUnload);
       window.removeEventListener("blur", onBlur);
+      window.removeEventListener("focus", onFocus);
       document.removeEventListener("contextmenu", handleContextMenu);
       document.removeEventListener("keydown", handleKeyDown);
+      clearTimeout(blurTimeout);
     };
   }, [answersIndex]);
+  
 
   useEffect(() => {
     const time = setInterval(() => {
       setTimer((prev) => prev - 1);
     }, 1000);
-    //console.log(error, data, isError);
+
     return () => clearInterval(time);
   }, [timer]);
 
