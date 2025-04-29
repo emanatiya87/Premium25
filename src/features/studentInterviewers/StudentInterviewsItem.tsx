@@ -27,7 +27,9 @@ function StudentInterviewsItem({
           : ""
       } `}
     >
-      <td className="p-2 border text-nowrap">{student.interviewer_name}</td>
+      <td className="p-2 border text-nowrap font-bold">
+        {student.interviewer_name}
+      </td>
       <td className="p-2 border text-nowrap">{student.name}</td>
       <td className="p-2 border text-nowrap">
         {format(new Date(student.interview_date), "eee MM/dd hh:mm aa")}
