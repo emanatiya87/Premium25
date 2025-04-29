@@ -15,7 +15,7 @@ import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { Toaster } from "react-hot-toast";
 import { lazy, Suspense } from "react";
 import PageSpinner from "./ui/PageSpinner";
-// import EventEnd from "./pages/EventEnd";
+import EventEnd from "./pages/EventEnd";
 
 // import InterviewersData from "./pages/InterviewersData";
 const InterviewersData = lazy(() => import("./pages/InterviewersData"));
@@ -23,7 +23,7 @@ const AppLayout = lazy(() => import("./ui/AppLayout"));
 const NotFound = lazy(() => import("./pages/NotFound"));
 const Data = lazy(() => import("./pages/Data"));
 const Interview = lazy(() => import("./pages/Interview"));
-const PremiumForm = lazy(() => import("./pages/PremiumForm"));
+// const PremiumForm = lazy(() => import("./pages/PremiumForm"));
 const UploadCv = lazy(() => import("./pages/UploadCv"));
 const Quiz = lazy(() => import("./pages/Quiz"));
 const StartQuiz = lazy(() => import("./features/quizPage/StartQuiz"));
@@ -46,7 +46,8 @@ function App() {
         <Suspense fallback={<PageSpinner />}>
           <Routes>
             <Route element={<AppLayout />}>
-              <Route path="/" element={<PremiumForm />} />
+              {/* <Route path="/" element={<PremiumForm />} /> */}
+              <Route path="/" element={<EventEnd />} />
               <Route path="/uploadcv" element={<UploadCv />} />
               <Route path="/interviewslot" element={<Interview />} />
               <Route path="/add-interview" element={<AddInterview />} />
