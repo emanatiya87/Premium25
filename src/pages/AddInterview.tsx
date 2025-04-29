@@ -59,17 +59,17 @@ function AddInterview() {
             onChange={(date: Date | null) => setInterviewDate(date)}
             showTimeSelect
             dateFormat="yyyy-MM-dd HH:mm"
-            timeIntervals={30}
+            timeIntervals={15}
             timeCaption="Time"
             placeholderText="Select date and time"
             className="form-input"
-            minDate={addDays(new Date(), 1)}
-            minTime={new Date(new Date().setHours(12, 0, 0))}
-            maxTime={new Date(new Date().setHours(23, 0, 0))}
+            minDate={new Date()}
+            minTime={new Date(new Date().setHours(10, 0, 0))}
+            maxTime={new Date(new Date().setHours(22, 0, 0))}
             calendarClassName="bg-white border rounded-lg shadow-lg p-4"
             dayClassName={(date) =>
               `text-sm p-2 rounded-full transition-all duration-200
-               hover:bg-primary  
+               hover:bg-primary
                ${
                  isSameDay(date, interviewDate || new Date())
                    ? "!bg-primary text-white"
@@ -78,7 +78,7 @@ function AddInterview() {
             }
             timeClassName={(date) =>
               `text-sm p-2 rounded-full transition-all duration-200
-               hover:bg-primary 
+               hover:bg-primary
                ${
                  isSameMinute(date, interviewDate || new Date())
                    ? "!bg-primary text-white"
