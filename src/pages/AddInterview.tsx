@@ -58,7 +58,7 @@ function AddInterview() {
             selected={interviewDate}
             onChange={(date: Date | null) => setInterviewDate(date)}
             showTimeSelect
-            dateFormat="yyyy-MM-dd HH:mm"
+            dateFormat="yyyy-MM-dd HH:mm "
             timeIntervals={15}
             timeCaption="Time"
             placeholderText="Select date and time"

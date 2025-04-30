@@ -10,18 +10,18 @@ function InterviewersData() {
   const [searchQuery, setSearchQuery] = useState<string>("");
   const [inputQ, setInputQ] = useState<string>("");
   const { isError, isLoading, students } = useStudentsInterviews(searchQuery);
-  const [currentPage, setCurrentPage] = useState<number>(1);
+  // const [currentPage, setCurrentPage] = useState<number>(1);
   const [isTodayDate, setIsToday] = useState<number>(0);
   function handleSearch(e: FormEvent) {
     e.preventDefault();
-    setCurrentPage(1);
+    // setCurrentPage(1);
     setSearchQuery(inputQ);
   }
 
   if (isError) return <Error />;
 
-  const pageSize = 8;
-  const startIndex = (currentPage - 1) * pageSize;
+  // const pageSize = 8;
+  // const startIndex = (currentPage - 1) * pageSize;
   let paginatedStudents = students?.sort((a, b) => {
     return compareAsc(a.interview_date, b.interview_date);
   });
@@ -31,10 +31,10 @@ function InterviewersData() {
       isToday(new Date(student.interview_date))
     );
   }
-  paginatedStudents = paginatedStudents?.slice(
-    startIndex,
-    startIndex + pageSize
-  );
+  // paginatedStudents = paginatedStudents?.slice(
+  //   startIndex,
+  //   startIndex + pageSize
+  // );
 
   // console.log(paginatedStudents);
 
@@ -64,7 +64,7 @@ function InterviewersData() {
               name="top"
               value={isTodayDate}
               onChange={() => {
-                setCurrentPage(1);
+                // setCurrentPage(1);
                 setIsToday((prev) => (prev === 0 ? 1 : 0));
               }}
             />
@@ -90,7 +90,7 @@ function InterviewersData() {
         ) : (
           <StudentsInterviewsList students={paginatedStudents || []} />
         )}
-        <div className="flex items-center justify-between mt-10">
+        {/* <div className="flex items-center justify-between mt-10">
           <Button
             onClick={() => setCurrentPage((prev) => prev - 1)}
             isLoading={currentPage == 1}
@@ -106,7 +106,7 @@ function InterviewersData() {
           >
             next
           </Button>
-        </div>
+        </div> */}
       </div>
     </div>
   );
