@@ -3,7 +3,7 @@ import Button from "../ui/Button";
 import { useQuery } from "@tanstack/react-query";
 import { getInterviews } from "../services/apiServices";
 import Spinner from "../ui/Spinner";
-import Error from "./Error";
+// import Error from "./Error";
 import InputGroup from "../ui/InputGroup";
 import InputCol from "../ui/InputCol";
 import { useForm } from "react-hook-form";
@@ -34,7 +34,14 @@ function Interview() {
   const { chooseInterview, isAdding } = useChooseInterview();
 
   if (isLoading) return <Spinner />;
-  if (isError) return <Error />;
+  if (isError)
+    return (
+      <div className=" bg-white w-full   lg:w-[85%] m-auto rounded-tl-[40px] rounded-br-[40px] p-4 md:p-6 lg:p-10 ">
+        <p className="text-3xl text-center my-10">
+          Oops! No Interviews Available Here Right Now. 🙃
+        </p>
+      </div>
+    );
 
   const seen = new Set();
   const uniqueInterviews = (interviews ?? []).filter((item) => {
