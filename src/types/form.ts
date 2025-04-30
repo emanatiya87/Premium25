@@ -32,7 +32,7 @@ export type StudentType = {
   event_source: string;
   experience: string;
   first_pref: string | null;
-
+  submission_time: Date | null;
   major: string;
   name: string;
   phone: string;

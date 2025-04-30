@@ -27,7 +27,9 @@ function StudentsList({ students }: { students: StudentType[] }) {
             <th className="p-2 border">Preferences percentage</th>
             <th className="p-2 border">event source</th>
             <th className="p-2 border">quiz score</th>
+            <th className="p-2 border">submitted quiz</th>
             <th className="p-2 border">Registered at</th>
+            <th className="p-2 border">allow slot </th>
           </tr>
         </thead>
         <tbody>

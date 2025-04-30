@@ -1,5 +1,9 @@
 import { addHours, format } from "date-fns";
 import { StudentType } from "../../types/form";
+import Button from "../../ui/Button";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { changeStatus } from "../../services/apiServices";
+import toast from "react-hot-toast";
 
 const status = {
   Accepted: "bg-green-200 text-green-800",
@@ -17,6 +21,22 @@ const studentyear = {
   other: { 1: "1st", 2: "2nd", 3: "3rd", 4: "4th" },
 };
 function StudentItem({ student, idx }: { student: StudentType; idx: number }) {
+  const client = useQueryClient();
+
+  const { mutate, isLoading: isChanging } = useMutation({
+    mutationFn: changeStatus,
+    onSuccess: (data) => {
+      toast.success(data);
+      client.invalidateQueries(["studentsData"]);
+    },
+    onError: (error: Error) => {
+      toast.error(error.message);
+    },
+  });
+  function handleSubmit() {
+    mutate({ phone: student.phone });
+  }
+
   return (
     <tr
       key={idx}
@@ -88,12 +108,30 @@ function StudentItem({ student, idx }: { student: StudentType; idx: number }) {
         {student.score ?? "pst has not been taken yet"}
       </td>
       <td className="p-2 border text-nowrap">
+        {" "}
+        {student.submission_time
+          ? format(
+              addHours(new Date(student.submission_time), 2),
+              "eee MM/dd hh:mm aa"
+            )
+          : "not chosen yet"}
+      </td>
+      <td className="p-2 border text-nowrap">
         {student.created_at
           ? format(
               addHours(new Date(student.created_at), 2),
               "eee MM/dd hh:mm aa"
             )
           : "not chosen yet"}
+      </td>
+      <td className="p-2 border text-nowrap">
+        <Button
+          onClick={handleSubmit}
+          isLoading={student.apply_status == "Accepted" || isChanging}
+          type="button"
+        >
+          allow
+        </Button>
       </td>
     </tr>
   );
