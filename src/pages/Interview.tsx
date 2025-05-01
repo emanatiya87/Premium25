@@ -38,7 +38,8 @@ function Interview() {
     return (
       <div className=" bg-white w-full   lg:w-[85%] m-auto rounded-tl-[40px] rounded-br-[40px] p-4 md:p-6 lg:p-10 ">
         <p className="text-3xl text-center my-10">
-          Oops! No Interviews Available Here Right Now. 🙃
+          Oops! No Interviews Available Here Right Now,wait for new slots to be
+          added.🙃
         </p>
       </div>
     );
