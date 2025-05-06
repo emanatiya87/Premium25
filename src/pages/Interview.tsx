@@ -79,8 +79,8 @@ function Interview() {
               {...register("phone", {
                 required: "please enter your email or phone",
                 maxLength: {
-                  value: 30,
-                  message: "max email or phone length 30",
+                  value: 50,
+                  message: "max email or phone length 50",
                 },
               })}
             />
